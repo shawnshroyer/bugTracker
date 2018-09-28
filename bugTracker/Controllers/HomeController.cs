@@ -10,6 +10,10 @@ namespace bugTracker.Controllers
     {
         public ActionResult Index()
         {
+            if (!(User.Identity.IsAuthenticated))
+            {
+                return RedirectToAction("LoginRegister", "Account");
+            }
             return View();
         }
 

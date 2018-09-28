@@ -423,6 +423,14 @@ namespace bugTracker.Controllers
             base.Dispose(disposing);
         }
 
+        // GET: /Account/LoginRegister
+        [AllowAnonymous]
+        public ActionResult LoginRegister(string returnUrl)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            return View();
+        }
+
         #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";

@@ -15,6 +15,7 @@ namespace bugTracker.Models
         public String Subject { get; set; }
         public string Body { get; set; }
         public string Status { get; set; }
+        public bool IsRead { get; set; }
 
         //Foreign Keys
         public int TicketId { get; set; }

@@ -13,6 +13,8 @@ namespace bugTracker.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string DisplayName { get; set; }
+        public string Avatar { get; set; }
+
 
         //Navigation to children
         public virtual ICollection<Project> Projects { get; set; }
