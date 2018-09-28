@@ -1,9 +1,10 @@
 ﻿@using bugTracker.Models
 @model LoginViewModel
 @{
-    Layout = null;
     ViewBag.Title = "Log in";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
+
 @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @id = "loginForm", role = "form" }))
 {
     @Html.AntiForgeryToken()
@@ -36,7 +37,13 @@
     </div>
 }
 
-
+@section scripts {
+    <script>
+        $("#loginBtn").click(function () {
+            $("#loginForm").submit();
+        });
+    </script>
+}
 
 
 @* Enable this once you have account confirmation enabled for password reset functionality

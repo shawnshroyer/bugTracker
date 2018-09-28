@@ -70,7 +70,7 @@ namespace bugTracker.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return RedirectToAction("LoginRegister");
             }
 
             // This doesn't count login failures towards account lockout
@@ -427,8 +427,12 @@ namespace bugTracker.Controllers
         [AllowAnonymous]
         public ActionResult LoginRegister(string returnUrl)
         {
-            ViewBag.ReturnUrl = returnUrl;
-            return View();
+            LoginRegisterViewModel model = new LoginRegisterViewModel
+            {
+                Register = new RegisterViewModel(),
+                Login = new LoginViewModel()
+            };
+            return View(model);
         }
 
         #region Helpers
