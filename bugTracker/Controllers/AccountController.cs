@@ -17,6 +17,7 @@ namespace bugTracker.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         public AccountController()
         {
@@ -70,6 +71,23 @@ namespace bugTracker.Controllers
         {
             if (!ModelState.IsValid)
             {
+                int temp = 0;
+                foreach (var modelValue in ViewData.ModelState.Values)
+                {
+                    foreach (var error in modelValue.Errors)
+                    {
+                        if (error.Exception is null)
+                        {
+                            TempData[temp.ToString()] = error.ErrorMessage.ToString();
+                        }
+                        else
+                        {
+                            TempData[error.Exception.ToString()] = error.ErrorMessage.ToString();
+                        }
+                        temp ++;
+                    }
+                }
+
                 return RedirectToAction("LoginRegister");
             }
 
@@ -151,8 +169,28 @@ namespace bugTracker.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                if (db.Users.Any(u => u.DisplayName == model.DisplayName))
+                {
+                    ModelState.AddModelError("DisplayName", "Name already taken, try again!");
+                    return View(model);
+                };
+
+                if (model.DisplayName == null)
+                {
+                    model.DisplayName = model.FirstName;
+                }
+
+                var user = new ApplicationUser
+                {
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    DisplayName = model.DisplayName,
+                    UserName = model.Email,
+                    Email = model.Email
+                };
+
                 var result = await UserManager.CreateAsync(user, model.Password);
+
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
@@ -169,7 +207,9 @@ namespace bugTracker.Controllers
             }
 
             // If we got this far, something failed, redisplay form
-            return View(model);
+            //return View(model);
+            TempData["error"] = "success";
+            return Redirect(Url.Action("LoginRegister", "Account") + "#signup");
         }
 
         //
@@ -430,8 +470,25 @@ namespace bugTracker.Controllers
             LoginRegisterViewModel model = new LoginRegisterViewModel
             {
                 Register = new RegisterViewModel(),
-                Login = new LoginViewModel()
+                Login = new LoginViewModel(),
             };
+            //ModelState.AddModelError("","This is a test");
+
+            var i = 0;
+            foreach (var temp in TempData)
+            {
+                bool isNum = int.TryParse(temp.Key.ToString(), out int num);
+                if (isNum)
+                {
+                    ModelState.AddModelError("", temp.Value.ToString());
+                }
+                else
+                {
+                    ModelState.AddModelError(temp.Key.ToString(), temp.Value.ToString());
+                }
+                i++;
+            }
+            
             return View(model);
         }
 
