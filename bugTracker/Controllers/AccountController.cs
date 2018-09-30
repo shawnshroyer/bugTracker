@@ -71,20 +71,15 @@ namespace bugTracker.Controllers
         {
             if (!ModelState.IsValid)
             {
-                int temp = 0;
-                foreach (var modelValue in ViewData.ModelState.Values)
+                var erroneousFields = ModelState.Where(ms => ms.Value.Errors.Any())
+                                .Select(x => new { x.Key, x.Value.Errors });
+                foreach (var erroneous in erroneousFields)
                 {
-                    foreach (var error in modelValue.Errors)
+                    //var fieldKey = erroneous.Key;
+                    foreach (var errText in erroneous.Errors)
                     {
-                        if (error.Exception is null)
-                        {
-                            TempData[temp.ToString()] = error.ErrorMessage.ToString();
-                        }
-                        else
-                        {
-                            TempData[error.Exception.ToString()] = error.ErrorMessage.ToString();
-                        }
-                        temp ++;
+                        //string fieldError = errText.ErrorMessage.ToString();
+                        TempData[erroneous.Key.ToString()] = errText.ErrorMessage.ToString();
                     }
                 }
 
@@ -171,8 +166,10 @@ namespace bugTracker.Controllers
             {
                 if (db.Users.Any(u => u.DisplayName == model.DisplayName))
                 {
-                    ModelState.AddModelError("DisplayName", "Name already taken, try again!");
-                    return View(model);
+                    //ModelState.AddModelError("DisplayName", "Name already taken, try again!");
+                    TempData["DisplayName"] = "Name already taken, try again!";
+
+                    return Redirect(Url.Action("LoginRegister", "Account") + "#signup");
                 };
 
                 if (model.DisplayName == null)
@@ -206,10 +203,22 @@ namespace bugTracker.Controllers
                 AddErrors(result);
             }
 
+            var erroneousFields = ModelState.Where(ms => ms.Value.Errors.Any())
+                .Select(x => new { x.Key, x.Value.Errors });
+            foreach (var erroneous in erroneousFields)
+            {
+                //var fieldKey = erroneous.Key;
+                foreach (var errText in erroneous.Errors)
+                {
+                    //string fieldError = errText.ErrorMessage.ToString();
+                    TempData[erroneous.Key.ToString()] = errText.ErrorMessage.ToString();
+                }
+            }
+
             // If we got this far, something failed, redisplay form
             //return View(model);
-            TempData["error"] = "success";
             return Redirect(Url.Action("LoginRegister", "Account") + "#signup");
+            //return new RedirectResult(Url.Action("LoginRegister", "Account") + "#signup");
         }
 
         //
@@ -472,23 +481,12 @@ namespace bugTracker.Controllers
                 Register = new RegisterViewModel(),
                 Login = new LoginViewModel(),
             };
-            //ModelState.AddModelError("","This is a test");
 
-            var i = 0;
-            foreach (var temp in TempData)
+            foreach (var err in TempData)
             {
-                bool isNum = int.TryParse(temp.Key.ToString(), out int num);
-                if (isNum)
-                {
-                    ModelState.AddModelError("", temp.Value.ToString());
-                }
-                else
-                {
-                    ModelState.AddModelError(temp.Key.ToString(), temp.Value.ToString());
-                }
-                i++;
+                ModelState.AddModelError(err.Key.ToString(), err.Value.ToString());
             }
-            
+
             return View(model);
         }
 
