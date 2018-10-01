@@ -3,10 +3,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Collections.Generic;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using bugTracker.Models;
+using bugTracker.Helpers;
 
 namespace bugTracker.Controllers
 {
@@ -333,7 +335,49 @@ namespace bugTracker.Controllers
             base.Dispose(disposing);
         }
 
-#region Helpers
+
+        //TODO: add logic fro RoleAssignment aka Get Post
+        //
+        // GET: /Manage/RoleAssignment
+        public ActionResult RoleAssignment()
+        {
+            //ViewBag.RoleId = new SelectList(db.Tickets, "Id", "Title");
+            //ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName");
+
+            UserRolesHelper userRolesHelper = new UserRolesHelper();
+
+            ViewBag.UserId = new SelectList(userRolesHelper.ListAllUser());
+
+            //ViewBag.RoleId = new SelectList(db.Tickets, "Id", "Title");
+
+            return View();
+        }
+
+        //
+        // POST: /Manage/SetPassword
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> RoleAssignment(string stuff)
+        //{
+        //    ICollection<string> ListUserRoles(string userId);
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        db.TicketAttachments.Add(ticketAttachment);
+        //        db.SaveChanges();
+        //        return RedirectToAction("Index");
+        //    }
+
+        //    ViewBag.TicketId = new SelectList(db.Tickets, "Id", "Title", ticketAttachment.TicketId);
+        //    ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName", ticketAttachment.UserId);
+        //    return View(ticketAttachment);
+
+
+        //    // If we got this far, something failed, redisplay form
+        //    return View(model);
+        //}
+
+        #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 

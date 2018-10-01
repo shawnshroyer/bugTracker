@@ -62,22 +62,3 @@
 
     @Scripts.Render("~/bundles/jqueryval")
 }
-
-
-@*@if (TempData.ContainsKey("status"))
-{
-    if (TempData["status"].ToString() == "success")
-    {
-        <script>swal("Congradulations!", "Your message has been sent!", "success");</script>
-    }
-
-    if (TempData["status"].ToString() == "error")
-    {
-        <script>swal("OOPS!", "There was a problem sending your message", "error");</script>
-    }
-
-    if (ViewData.ModelState[""] != null && ViewData.ModelState[""].Errors.Count() > 0)
-        {
-            <script>swal("Good job!", "You clicked the button!", "success");</script>
-        }
-}*@

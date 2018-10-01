@@ -166,7 +166,6 @@ namespace bugTracker.Controllers
             {
                 if (db.Users.Any(u => u.DisplayName == model.DisplayName))
                 {
-                    //ModelState.AddModelError("DisplayName", "Name already taken, try again!");
                     TempData["DisplayName"] = "Name already taken, try again!";
 
                     return Redirect(Url.Action("LoginRegister", "Account") + "#signup");
@@ -210,15 +209,12 @@ namespace bugTracker.Controllers
                 //var fieldKey = erroneous.Key;
                 foreach (var errText in erroneous.Errors)
                 {
-                    //string fieldError = errText.ErrorMessage.ToString();
                     TempData[erroneous.Key.ToString()] = errText.ErrorMessage.ToString();
                 }
             }
 
             // If we got this far, something failed, redisplay form
-            //return View(model);
             return Redirect(Url.Action("LoginRegister", "Account") + "#signup");
-            //return new RedirectResult(Url.Action("LoginRegister", "Account") + "#signup");
         }
 
         //
