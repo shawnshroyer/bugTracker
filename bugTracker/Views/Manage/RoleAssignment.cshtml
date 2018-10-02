@@ -1,41 +1,57 @@
 ﻿@using bugTracker.Models
-@model RoleAssignmentViewModel;
 
 @{
     ViewBag.Title = "RoleAssignment";
-    Layout = "~/Views/Shared/_Layout";
 }
-
 <h1>RoleAssignment</h1>
 
-@using (Html.BeginForm("RoleAssignment", "Manage", null, FormMethod.Post, new { @id = "loginForm", role = "form" }))
+@using (Html.BeginForm("RoleAssignment", "Manage", null, FormMethod.Post, new { @id = "assignForm", role = "form" }))
 {
     <div class="form-group">
-        @Html.LabelFor(model => model., "TicketId", htmlAttributes: new { @class = "control-label col-md-2" })
+        @*@Html.LabelFor(model => model., "TicketId", htmlAttributes: new { @class = "control-label col-md-2" })*@
         <div class="col-md-10">
-            @Html.DropDownList("TicketId", null, htmlAttributes: new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.TicketId, "", new { @class = "text-danger" })
+            @Html.DropDownList("UserId", null, htmlAttributes: new { @class = "form-control" })
+            @*@Html.DropDownList("TicketId", null, htmlAttributes: new { @class = "form-control" })*@
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(model => model., "TicketId", htmlAttributes: new { @class = "control-label col-md-2" })
+        @*@Html.LabelFor(model => model., "TicketId", htmlAttributes: new { @class = "control-label col-md-2" })*@
         <div class="col-md-10">
-            @Html.DropDownList("TicketId", null, htmlAttributes: new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.TicketId, "", new { @class = "text-danger" })
+            @*@Html.DropDownList("TicketId", null, htmlAttributes: new { @class = "form-control" })*@
+            @Html.DropDownList("RoleId", null, htmlAttributes: new { @class = "form-control" })
         </div>
         <div>
-            <a id="loginBtn" class="btn btn-default submit" href="#">Log in</a>
-            <a class="reset_pass" href="#">Lost your password?</a>
+            <a id="assignBtn" class="btn btn-default submit btn-success" href="#">Assign / Update</a>
+            <a id="cancelBtn" class="btn btn-default submit btn-warning" href=@Url.Action("Index","Home")>Cancel</a>
+            <a id="deleteBtn" class="btn btn-default submit btn-danger" href="#">Remove User From All Roles</a>
         </div>
     </div>
 }
+
+
+
 
 @section scripts {
     <script>
-        $("#loginBtn").click(function () {
-            $("#loginForm").submit();
+        $("#assignBtn").click(function () {
+            //To only show hidden fields upon submision so not to danger the app by malicious user
+            $('<input type="hidden" name="Delete" value="false">').appendTo('form');
+            $("#assignForm").submit();
+        });
+
+        $("#deleteBtn").click(function () {
+            $('<input type="hidden" name="Delete" value="true">').appendTo('form');
+            $("#assignForm").submit();
         });
     </script>
 
     @Scripts.Render("~/bundles/jqueryval")
 }
+
+
+@*$('<input type="hidden">').foo(...)
+$('<input>').attr({
+    type: 'hidden',
+    id: 'foo',
+    name: 'bar'
+}).appendTo('form');*@

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using bugTracker.Helpers;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 
@@ -84,11 +83,4 @@ namespace bugTracker.Models
         public string SelectedProvider { get; set; }
         public ICollection<System.Web.Mvc.SelectListItem> Providers { get; set; }
     }
-
-    public class RoleAssignmentViewModel
-    {
-        public string UserId { get; set; }
-        public int RoleId { get; set; }
-    }
-
 }

@@ -14,7 +14,15 @@ namespace bugTracker.Models
         public string LastName { get; set; }
         public string DisplayName { get; set; }
         public string Avatar { get; set; }
+        public string CustomData
+        {
+            get
+            {
+                return $"{Email} - {LastName}, {FirstName}";
+            }            
+        }
 
+      
 
         //Navigation to children
         public virtual ICollection<Project> Projects { get; set; }

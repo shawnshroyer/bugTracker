@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using bugTracker.Models;
-
+using System.Web.Mvc;
 
 namespace bugTracker.Helpers
 {
     public class UserRolesHelper
     {
-        private UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())); private ApplicationDbContext db = new ApplicationDbContext();
+        private UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         public bool IsUserInRole(string userId, string roleName)
         {
@@ -67,6 +68,13 @@ namespace bugTracker.Helpers
         public ICollection<ApplicationUser> ListAllUser()
         {
             var resultList = new List<ApplicationUser>(userManager.Users.ToList());
+
+            return resultList;
+        }
+
+        public SelectList ListAllRoles()
+        {
+            var resultList = new SelectList(db.Roles.ToList(), "Id", "Name");
 
             return resultList;
         }

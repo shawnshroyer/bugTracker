@@ -17,6 +17,8 @@ namespace bugTracker.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext db = new ApplicationDbContext();
+        private UserRolesHelper UserRolesHelper = new UserRolesHelper();
 
         public ManageController()
         {
@@ -337,45 +339,47 @@ namespace bugTracker.Controllers
 
 
         //TODO: add logic fro RoleAssignment aka Get Post
+        //TODO: https://nimblegecko.com/how-to-set-default-selected-value-on-drop-down-list-from-database/
         //
         // GET: /Manage/RoleAssignment
         public ActionResult RoleAssignment()
         {
-            //ViewBag.RoleId = new SelectList(db.Tickets, "Id", "Title");
-            //ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName");
-
-            UserRolesHelper userRolesHelper = new UserRolesHelper();
-
-            ViewBag.UserId = new SelectList(userRolesHelper.ListAllUser());
-
-            //ViewBag.RoleId = new SelectList(db.Tickets, "Id", "Title");
-
+            ViewBag.UserId = new SelectList(db.Users.ToList(), "Id", "CustomData");
+            ViewBag.RoleId = new SelectList(db.Roles.ToList(), "Id", "Name");
+            
             return View();
         }
 
-        //
-        // POST: /Manage/SetPassword
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> RoleAssignment(string stuff)
-        //{
-        //    ICollection<string> ListUserRoles(string userId);
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.TicketAttachments.Add(ticketAttachment);
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
+        //post: /manage/RoleAssignment
+       [HttpPost]
+       [ValidateAntiForgeryToken]
+        public async Task<ActionResult> RoleAssignment(string UserId, string RoleId, bool Delete)
+        {
+            if (string.IsNullOrEmpty(UserId) || string.IsNullOrEmpty(RoleId))
+            {
+                return View();
+            }
 
-        //    ViewBag.TicketId = new SelectList(db.Tickets, "Id", "Title", ticketAttachment.TicketId);
-        //    ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName", ticketAttachment.UserId);
-        //    return View(ticketAttachment);
+            if (Delete)
+            {
+                foreach (var role in UserRolesHelper.ListUserRoles(UserId))
+                {
+                    UserRolesHelper.RemoveUserFromRole(UserId, role);
+                }
 
+                return View();
+            }
 
-        //    // If we got this far, something failed, redisplay form
-        //    return View(model);
-        //}
+            if (UserRolesHelper.IsUserInRole(UserId, RoleId))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            UserRolesHelper.AddUserToRole(UserId, RoleId);
+
+            return RedirectToAction("Index", "Home");
+        }
 
         #region Helpers
         // Used for XSRF protection when adding external logins
