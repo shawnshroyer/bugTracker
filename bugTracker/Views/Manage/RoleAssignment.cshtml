@@ -1,32 +1,30 @@
 ﻿@using bugTracker.Models
 
 @{
-    ViewBag.Title = "RoleAssignment";
+    ViewBag.Title = "Role Assignment";
 }
-<h1>RoleAssignment</h1>
+<h1>@ViewBag.Title</h1>
+<div class="container">
+    @using (Html.BeginForm("RoleAssignment", "Manage", null, FormMethod.Post, new { @id = "assignForm", role = "form" }))
+    {
+        <div class="row">
+            <div class="form-group col-md-4 col-md-offset-2">
+                    @Html.DropDownList("UserId", null, htmlAttributes: new { @class = "form-control" })
+            </div>
+            <div class="form-group col-md-4">
+                    @Html.DropDownList("RoleId", null, htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
 
-@using (Html.BeginForm("RoleAssignment", "Manage", null, FormMethod.Post, new { @id = "assignForm", role = "form" }))
-{
-    <div class="form-group">
-        @*@Html.LabelFor(model => model., "TicketId", htmlAttributes: new { @class = "control-label col-md-2" })*@
-        <div class="col-md-10">
-            @Html.DropDownList("UserId", null, htmlAttributes: new { @class = "form-control" })
-            @*@Html.DropDownList("TicketId", null, htmlAttributes: new { @class = "form-control" })*@
+        <div class="row">
+            <div class="col-md-8 col-md-offset-4">
+                <a id="assignBtn" class="btn btn-default submit btn-success" href="#">Assign / Update</a>
+                <a id="cancelBtn" class="btn btn-default submit btn-warning" href=@Url.Action("Index","Home")>Cancel</a>
+                <a id="deleteBtn" class="btn btn-default submit btn-danger" href="#">Remove User From All Roles</a>
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        @*@Html.LabelFor(model => model., "TicketId", htmlAttributes: new { @class = "control-label col-md-2" })*@
-        <div class="col-md-10">
-            @*@Html.DropDownList("TicketId", null, htmlAttributes: new { @class = "form-control" })*@
-            @Html.DropDownList("RoleId", null, htmlAttributes: new { @class = "form-control" })
-        </div>
-        <div>
-            <a id="assignBtn" class="btn btn-default submit btn-success" href="#">Assign / Update</a>
-            <a id="cancelBtn" class="btn btn-default submit btn-warning" href=@Url.Action("Index","Home")>Cancel</a>
-            <a id="deleteBtn" class="btn btn-default submit btn-danger" href="#">Remove User From All Roles</a>
-        </div>
-    </div>
-}
+    }
+</div>
 
 
 

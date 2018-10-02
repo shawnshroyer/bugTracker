@@ -237,6 +237,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\bugTracker.css" />
     <Content Include="Content\custom.css" />
     <Content Include="Content\custom.min.css" />
     <Content Include="Content\font-awesome.css" />
@@ -246,22 +247,8 @@
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="images\american-express.png" />
-    <Content Include="images\cropper.jpg" />
-    <Content Include="images\favicon.ico" />
     <Content Include="images\img.jpg" />
-    <Content Include="images\inbox.png" />
-    <Content Include="images\mastercard.png" />
-    <Content Include="images\media.jpg" />
-    <Content Include="images\paypal.png" />
-    <Content Include="images\picture.jpg" />
-    <Content Include="images\prod-1.jpg" />
-    <Content Include="images\prod-2.jpg" />
-    <Content Include="images\prod-3.jpg" />
-    <Content Include="images\prod-4.jpg" />
-    <Content Include="images\prod-5.jpg" />
     <Content Include="images\user.png" />
-    <Content Include="images\visa.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
@@ -4617,6 +4604,7 @@
     <Content Include="Views\Account\LoginRegister.cshtml" />
     <Content Include="Views\Account\Login - old.cshtml" />
     <Content Include="Views\Manage\RoleAssignment.cshtml" />
+    <Content Include="Views\Manage\UserProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

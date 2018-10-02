@@ -59,7 +59,8 @@ namespace bugTracker.Controllers
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
-            return View();
+            //return View();
+            return RedirectToAction("LoginRegister", "Account", new { ReturnUrl = returnUrl });
         }
 
         //
@@ -100,7 +101,8 @@ namespace bugTracker.Controllers
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
-                    return View(model);
+                    TempData[""] = "Invalid login attempt.";
+                    return RedirectToAction("LoginRegister");
             }
         }
 
@@ -472,6 +474,8 @@ namespace bugTracker.Controllers
         [AllowAnonymous]
         public ActionResult LoginRegister(string returnUrl)
         {
+            ViewBag.ReturnUrl = returnUrl;
+
             LoginRegisterViewModel model = new LoginRegisterViewModel
             {
                 Register = new RegisterViewModel(),

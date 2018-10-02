@@ -338,23 +338,22 @@ namespace bugTracker.Controllers
         }
 
 
-        //TODO: add logic fro RoleAssignment aka Get Post
         //TODO: https://nimblegecko.com/how-to-set-default-selected-value-on-drop-down-list-from-database/
         //
         // GET: /Manage/RoleAssignment
+        [Authorize(Roles = "Administrator")] //TODO: Make sure access via code is blocked
         public ActionResult RoleAssignment()
         {
-            ViewBag.UserId = new SelectList(db.Users.ToList(), "Id", "CustomData");
-            ViewBag.RoleId = new SelectList(db.Roles.ToList(), "Id", "Name");
+            ViewBag.UserId = new SelectList(db.Users.ToList(), "Id", "CustomData");    
+            ViewBag.RoleId = new SelectList(db.Roles.ToList(), "Name", "Name");
             
             return View();
         }
 
-
         //post: /manage/RoleAssignment
-       [HttpPost]
-       [ValidateAntiForgeryToken]
-        public async Task<ActionResult> RoleAssignment(string UserId, string RoleId, bool Delete)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult RoleAssignment(string UserId, string RoleId, bool Delete)
         {
             if (string.IsNullOrEmpty(UserId) || string.IsNullOrEmpty(RoleId))
             {
@@ -380,6 +379,16 @@ namespace bugTracker.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+
+
+        // GET: /Manage/UserProfile
+        public ActionResult UserProfile()
+        {
+            
+
+            return View();
+        }
+
 
         #region Helpers
         // Used for XSRF protection when adding external logins
