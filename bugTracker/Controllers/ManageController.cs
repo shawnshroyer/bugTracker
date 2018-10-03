@@ -242,7 +242,9 @@ namespace bugTracker.Controllers
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
-                return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
+                //return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
+                TempData[""] = "Password Changed Successfully, Please Log Back In.";
+                return RedirectToAction("LoginRegister", "Account");
             }
             AddErrors(result);
             return View(model);
@@ -367,26 +369,42 @@ namespace bugTracker.Controllers
                     UserRolesHelper.RemoveUserFromRole(UserId, role);
                 }
 
-                return View();
+                return RedirectToAction("RoleAssignment");
             }
 
             if (UserRolesHelper.IsUserInRole(UserId, RoleId))
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("RoleAssignment");
             }
 
             UserRolesHelper.AddUserToRole(UserId, RoleId);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("RoleAssignment");
         }
 
 
         // GET: /Manage/UserProfile
         public ActionResult UserProfile()
         {
+            UserProfileViewModel model = new UserProfileViewModel
+            {
+                CurrentUser = new ApplicationUser(),
+                ChangePasswordModel = new ChangePasswordViewModel(),
+            };
+
+            model.CurrentUser = UserManager.FindById(User.Identity.GetUserId());
+
+            return View(model);
+        }
+
+        //post: /manage/RoleAssignment
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UserProfile(ApplicationUser User)
+        {
             
 
-            return View();
+            return RedirectToAction("RoleAssignment");
         }
 
 

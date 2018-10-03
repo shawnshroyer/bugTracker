@@ -83,4 +83,10 @@ namespace bugTracker.Models
         public string SelectedProvider { get; set; }
         public ICollection<System.Web.Mvc.SelectListItem> Providers { get; set; }
     }
+
+    public class UserProfileViewModel
+    {
+        public ApplicationUser CurrentUser { get; set; }
+        public ChangePasswordViewModel ChangePasswordModel { get; set; }
+    }
 }

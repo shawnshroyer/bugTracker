@@ -4605,6 +4605,7 @@
     <Content Include="Views\Account\Login - old.cshtml" />
     <Content Include="Views\Manage\RoleAssignment.cshtml" />
     <Content Include="Views\Manage\UserProfile.cshtml" />
+    <Content Include="Views\Manage\ChangeUserProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

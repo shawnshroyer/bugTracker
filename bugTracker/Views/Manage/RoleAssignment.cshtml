@@ -7,12 +7,13 @@
 <div class="container">
     @using (Html.BeginForm("RoleAssignment", "Manage", null, FormMethod.Post, new { @id = "assignForm", role = "form" }))
     {
+        @Html.AntiForgeryToken()
         <div class="row">
             <div class="form-group col-md-4 col-md-offset-2">
-                    @Html.DropDownList("UserId", null, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownList("UserId", null, htmlAttributes: new { @class = "form-control" })
             </div>
             <div class="form-group col-md-4">
-                    @Html.DropDownList("RoleId", null, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownList("RoleId", null, htmlAttributes: new { @class = "form-control" })
             </div>
         </div>
 
@@ -45,11 +46,3 @@
 
     @Scripts.Render("~/bundles/jqueryval")
 }
-
-
-@*$('<input type="hidden">').foo(...)
-$('<input>').attr({
-    type: 'hidden',
-    id: 'foo',
-    name: 'bar'
-}).appendTo('form');*@
