@@ -9,6 +9,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using bugTracker.Models;
+using static bugTracker.ApplicationSignInManager;
+using System.Net.Mail;
 
 namespace bugTracker.Controllers
 {
@@ -248,19 +250,49 @@ namespace bugTracker.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await UserManager.FindByNameAsync(model.Email);
-                if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
+                try
                 {
-                    // Don't reveal that the user does not exist or is not confirmed
+                    var user = await UserManager.FindByNameAsync(model.Email);
+                    if (user == null)
+                    {
+                        // Don't reveal that the user does not exist or is not confirmed
+                        return View("ForgotPasswordConfirmation");
+                    }
+
+                    // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
+                    // Send an email with this link
+
+                    //Below code is MVC way, can be implemented, but using a quicker way for the time being.
+                    string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                    var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    //await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    //return RedirectToAction("ForgotPasswordConfirmation", "Account");
+
+                    var message = "<p>Email From: <bold>{0}</bold>({1})</p><p> Message:</p><p>{2}</p> ";
+                    //var from = "MyPortfolio<example@email.com>";
+                    //model.Body = "This is a message from your portfolio site.  The name and the email of the contacting person is above.";
+
+                    var email = new MailMessage("noreply@gmail.com", model.Email)
+                    {
+                        Subject = "Password Reset for Rant Blog",
+                        Body = string.Format(message, "Rant Blog Admin", "noreply@gmail.com", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>"),
+                        IsBodyHtml = true
+                    };
+
+                    var svc = new PersonalEmail();
+                    await svc.SendAsync(email);
+
+                    ModelState.Clear();
+
+                    TempData["status"] = "success";
                     return View("ForgotPasswordConfirmation");
                 }
-
-                // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-                // Send an email with this link
-                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                // return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                catch (Exception ex)
+                {
+                    TempData["status"] = "error";
+                    Console.WriteLine(ex.Message);
+                    await Task.FromResult(0);
+                }
             }
 
             // If we got this far, something failed, redisplay form

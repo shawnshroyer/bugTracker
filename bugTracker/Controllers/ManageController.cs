@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using bugTracker.Models;
 using bugTracker.Helpers;
+using bugTracker.ViewModels;
 
 namespace bugTracker.Controllers
 {
@@ -383,28 +384,53 @@ namespace bugTracker.Controllers
         }
 
 
-        // GET: /Manage/UserProfile
+        // GET: /manage/UserProfile
         public ActionResult UserProfile()
         {
             UserProfileViewModel model = new UserProfileViewModel
             {
                 CurrentUser = new ApplicationUser(),
+                ProfileUpdateModel = new ProfileUpdateViewModel(),
                 ChangePasswordModel = new ChangePasswordViewModel(),
             };
 
             model.CurrentUser = UserManager.FindById(User.Identity.GetUserId());
 
+            model.ProfileUpdateModel.Id = model.CurrentUser.Id;
+            model.ProfileUpdateModel.FirstName = model.CurrentUser.FirstName;
+            model.ProfileUpdateModel.LastName = model.CurrentUser.LastName;
+            model.ProfileUpdateModel.DisplayName = model.CurrentUser.DisplayName;
+            model.ProfileUpdateModel.Avatar = model.CurrentUser.Avatar;
+            model.ProfileUpdateModel.Email = model.CurrentUser.Email;
+            model.ProfileUpdateModel.UserName = model.CurrentUser.UserName;
+
             return View(model);
         }
 
-        //post: /manage/RoleAssignment
+        //post: /manage/ChangeUserProfile
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult UserProfile(ApplicationUser User)
+        public ActionResult ChangeUserProfile(ProfileUpdateViewModel User)
         {
-            
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("UserProfile");
+            }
 
-            return RedirectToAction("RoleAssignment");
+            var profile = new ProfileUpdateViewModel
+            {
+                Id = User.Id,
+                FirstName = User.FirstName,
+                LastName = User.LastName,
+                DisplayName = User.DisplayName,
+                Avatar = User.Avatar,
+                Email = User.Email,
+                UserName = User.Email
+            };
+
+            UserRolesHelper.UpdateUserData(profile);
+
+            return RedirectToAction("UserProfile");
         }
 
 

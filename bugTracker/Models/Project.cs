@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -12,8 +13,10 @@ namespace bugTracker.Models
 
         //Properties
         public string Name { get; set; }
+
+        [DataType(DataType.MultilineText)]
         public string Details { get; set; }
-        public string Created { get; set; }
+        public DateTimeOffset Created { get; set; }
 
         //Foreign Keys
 

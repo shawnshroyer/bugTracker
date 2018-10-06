@@ -50,6 +50,8 @@ namespace bugTracker.Controllers
         {
             if (ModelState.IsValid)
             {
+                project.Created = DateTimeOffset.Now;
+
                 db.Projects.Add(project);
                 db.SaveChanges();
                 return RedirectToAction("Index");

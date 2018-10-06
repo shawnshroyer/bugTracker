@@ -22,10 +22,9 @@
         @Html.CheckBoxFor(m => m.RememberMe)&nbsp;@Html.LabelFor(m => m.RememberMe)
     </div>
 
-<div>
-    <a id="loginBtn" class="btn btn-default submit" href="#">Log in</a>
-    @*<a class="reset_pass" href="#">Lost your password?</a>*@
-</div>
+    <div>
+        <a id="loginBtn" class="btn btn-default submit" href="#">Log in</a>
+    </div>
 
 <div class="clearfix"></div>
 <div class="separator">
@@ -33,31 +32,27 @@
         New to site?
         <a href="#signup" class="to_register"> Create Account </a>
     </p>
+    <p>
+        @Html.ActionLink("Forgot your password?", "ForgotPassword")
+    </p>
     <div class="clearfix"></div>
     <br />
     <div>
-        <h1><i class="fa fa-paw"></i> Gentelella Alela!</h1>
+        <h1><i class="fa fa-bug"></i> Gentelella Alela!</h1>
         <p>©2016 All Rights Reserved. Gentelella Alela! is a Bootstrap 3 template. Privacy and Terms</p>
     </div>
 </div>
 }
 
-@section scripts {
+        @section scripts {
     <script>
         $("#loginBtn").click(function () {
             $("#loginForm").submit();
-        });
+            });
     </script>
 
     @Scripts.Render("~/bundles/jqueryval")
 }
-
-
-@* Enable this once you have account confirmation enabled for password reset functionality
-    <p>
-        @Html.ActionLink("Forgot your password?", "ForgotPassword")
-    </p>*@
-
 
 @*<div class="col-md-4">
         <section id="socialLoginForm">

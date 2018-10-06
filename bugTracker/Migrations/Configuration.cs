@@ -64,6 +64,42 @@ namespace bugTracker.Migrations
                     DisplayName = "Twitch"
                 }, "Abc&123!");
             }
+ 
+            if (!context.Users.Any(u => u.Email == "pm@mailinator.com"))
+            {
+                userManager.Create(new ApplicationUser
+                {
+                    UserName = "pm@mailinator.com",
+                    Email = "pm@mailinator.com",
+                    FirstName = "Project",
+                    LastName = "Manager",
+                    DisplayName = "PM Supreme"
+                }, "*pmUser123");
+            }
+
+            if (!context.Users.Any(u => u.Email == "developer@mailinator.com"))
+            {
+                userManager.Create(new ApplicationUser
+                {
+                    UserName = "developer@mailinator.com",
+                    Email = "developer@mailinator.com",
+                    FirstName = "Lonely",
+                    LastName = "Developer",
+                    DisplayName = "Developer Supreme"
+                }, "*devUser123");
+            }
+
+            if (!context.Users.Any(u => u.Email == "submitter@mailinator.com"))
+            {
+                userManager.Create(new ApplicationUser
+                {
+                    UserName = "submitter@mailinator.com",
+                    Email = "submitter@mailinator.com",
+                    FirstName = "Sub",
+                    LastName = "Mitter",
+                    DisplayName = "Submit"
+                }, "*subUser123");
+            }
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
             //  to avoid creating duplicate seed data.
@@ -74,6 +110,15 @@ namespace bugTracker.Migrations
 
             userId = userManager.FindByEmail("JasonTwichell@mailinator.com").Id;
             userManager.AddToRole(userId, "Administrator");
+
+            userId = userManager.FindByEmail("pm@mailinator.com").Id;
+            userManager.AddToRole(userId, "Project Manager");
+
+            userId = userManager.FindByEmail("developer@mailinator.com").Id;
+            userManager.AddToRole(userId, "Developer");
+
+            userId = userManager.FindByEmail("submitter@mailinator.com").Id;
+            userManager.AddToRole(userId, "Submitter");
         }
     }
 }

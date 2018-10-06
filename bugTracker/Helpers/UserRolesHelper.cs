@@ -5,6 +5,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using bugTracker.Models;
 using System.Web.Mvc;
+using bugTracker.ViewModels;
 
 namespace bugTracker.Helpers
 {
@@ -77,6 +78,32 @@ namespace bugTracker.Helpers
             var resultList = new SelectList(db.Roles.ToList(), "Id", "Name");
 
             return resultList;
+        }
+
+        //Used to update data in the user profile. 
+        //Would like to add return for success or failure
+        public void UpdateUserData(ProfileUpdateViewModel user)
+        {
+            var thisUser = db.Users.Find(user.Id);
+
+            thisUser.Id = user.Id;
+            thisUser.FirstName = user.FirstName;
+            thisUser.LastName = user.LastName;
+            thisUser.DisplayName = user.DisplayName;
+            thisUser.Avatar = user.Avatar;
+            thisUser.Email = user.Email;
+            thisUser.UserName = user.Email;
+
+            db.Users.Attach(thisUser);
+            db.Entry(thisUser).Property(x => x.FirstName).IsModified = true;
+            db.Entry(thisUser).Property(x => x.LastName).IsModified = true;
+            db.Entry(thisUser).Property(x => x.DisplayName).IsModified = true;
+            db.Entry(thisUser).Property(x => x.Avatar).IsModified = true;
+            db.Entry(thisUser).Property(x => x.Email).IsModified = true;
+            db.Entry(thisUser).Property(x => x.UserName).IsModified = true;
+
+          
+            db.SaveChanges();
         }
     }
 }

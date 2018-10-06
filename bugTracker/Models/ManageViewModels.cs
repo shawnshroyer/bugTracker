@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using bugTracker.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 
@@ -87,6 +88,7 @@ namespace bugTracker.Models
     public class UserProfileViewModel
     {
         public ApplicationUser CurrentUser { get; set; }
+        public ProfileUpdateViewModel ProfileUpdateModel { get; set; }
         public ChangePasswordViewModel ChangePasswordModel { get; set; }
     }
 }

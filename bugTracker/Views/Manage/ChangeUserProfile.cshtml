@@ -1,8 +1,9 @@
-﻿@model bugTracker.Models.ApplicationUser
+﻿@model bugTracker.ViewModels.ProfileUpdateViewModel
 
 @using (Html.BeginForm("ChangeUserProfile", "Manage", FormMethod.Post, new { @id = "cngUserForm", @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.Id)
 
     <div class="form-horizontal">
         <h4>ApplicationUser</h4>
@@ -79,21 +80,24 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input id="cngUserProfile" value="Save" class="btn btn-default" />
+                @*<input id="cngUserBtn" value="Save" class="btn btn-default" />*@
+                <button id="cngUserBtn" class="btn btn-default">Save</button>
             </div>
         </div>
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
 @section scripts
 {
 <script>
-    $("#cngUserProfile").click(function () {
-        $('<input type="hidden" name="Id" value="@Model.Id">').appendTo('form');
+    $("#cngUserBtn").click(function () {
+        $('<input type="hidden" name="Id" value=@Model.Id>').appendTo("#cngUserForm");
         $("#cngUserForm").submit();
     });
+
+    @Scripts.Render("~/bundles/jqueryval")
+
 </script>
 }
+
+<input id="Id" name="Id" type="hidden" value="7c17372c-692f-4f21-9c9b-8a0ce03219d3">
