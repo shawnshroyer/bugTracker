@@ -13,7 +13,7 @@
     </div>
     <div class="x_content">
         <br />
-        @using (Html.BeginForm("Create","Projects", FormMethod.Post, new { @class = "form-horizontal form-label-left", id="createFrm" }))
+        @using (Html.BeginForm("Create", "Projects", FormMethod.Post, new { @class = "form-horizontal form-label-left", id = "createFrm" }))
         {
             @Html.AntiForgeryToken()
 
@@ -34,15 +34,15 @@
                         @Html.ValidationMessageFor(model => model.Details, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                <div class="ln_solid"></div>
-                <div class="form-group">
-                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                        <button id="createBtn" class="btn btn-success">Submit</button>
-                        <button class="btn btn-warning" href=@Url.Action("Index","Home")>Cancel</button>
-                    </div>
-                </div>
             </div>
-         }
+        }
+        <div class="ln_solid"></div>
+        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+            <input type="button" id="createBtn" class="btn btn-success" value="Submit" />
+            @Html.ActionLink("Cancel", "Index", "Projects", null, new { @class="btn btn-warning" })
+        </div>
+
+
     </div>
 </div>
     </div>

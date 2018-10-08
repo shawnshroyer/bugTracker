@@ -7,12 +7,16 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using bugTracker.Models;
+using bugTracker.Helpers;
+
 
 namespace bugTracker.Controllers
 {
     public class ProjectsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private UserRolesHelper userHelper = new UserRolesHelper();
+        private ProjectsHelper projectHelper = new ProjectsHelper();
 
         // GET: Projects
         public ActionResult Index()
@@ -36,6 +40,7 @@ namespace bugTracker.Controllers
         }
 
         // GET: Projects/Create
+        [Authorize(Roles = "Administrator, Project Manager")]
         public ActionResult Create()
         {
             return View();
@@ -54,24 +59,29 @@ namespace bugTracker.Controllers
 
                 db.Projects.Add(project);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Create");
             }
 
             return View(project);
         }
 
         // GET: Projects/Edit/5
+        [Authorize(Roles = "Administrator, Project Manager")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Project project = db.Projects.Find(id);
+
             if (project == null)
             {
                 return HttpNotFound();
             }
+            ViewBag.Users = userHelper.ListAllUsers().OrderBy(u => u.LastName);
+            
             return View(project);
         }
 
@@ -80,14 +90,16 @@ namespace bugTracker.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Details,Created")] Project project)
+        public ActionResult Edit([Bind(Include = "Id,Name,Details,Created")] Project project, IList<SelectList> userId)
         {
             if (ModelState.IsValid)
             {
                 db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
+
             return View(project);
         }
 

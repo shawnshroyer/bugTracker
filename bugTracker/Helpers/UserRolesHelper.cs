@@ -66,7 +66,7 @@ namespace bugTracker.Helpers
             return resultList;
         }
 
-        public ICollection<ApplicationUser> ListAllUser()
+        public ICollection<ApplicationUser> ListAllUsers()
         {
             var resultList = new List<ApplicationUser>(userManager.Users.ToList());
 

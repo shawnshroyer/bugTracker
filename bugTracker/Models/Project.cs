@@ -12,10 +12,13 @@ namespace bugTracker.Models
         public int Id { get; set; }
 
         //Properties
+        [Required]
         public string Name { get; set; }
 
+        [Required]
         [DataType(DataType.MultilineText)]
         public string Details { get; set; }
+
         public DateTimeOffset Created { get; set; }
 
         //Foreign Keys

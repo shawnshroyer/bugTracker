@@ -21,6 +21,9 @@
     <link href="~/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
     <!-- Bootstrap-progressbar -->
     <link href="~/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet" />
+    <!-- iCheck -->
+    <link href="~/vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+
     <!-- Custom Theme Style -->
     <link href="~/Content/custom.min.css" rel="stylesheet">
 
@@ -83,7 +86,12 @@
                                 <li>
                                     <a><i class="fa fa-briefcase"></i> Projects <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        <li>@Html.ActionLink("Create Project", "Create", "Projects")</li>
+                                        @if (User.IsInRole("Administrator") || User.IsInRole("Project Manager"))
+                                        {
+                                            <li>@Html.ActionLink("Create Project", "Create", "Projects")</li>
+                                        }
+
+                                        <li>@Html.ActionLink("View Projects", "Index", "Projects")</li>
                                     </ul>
                                 </li>
                             </ul>
@@ -238,19 +246,14 @@
     <script src="~/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
     <!-- Bootstrap-Progressbar -->
     <script src="~/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
-
-    <!-- Custom Theme Scripts -->
-    <script src="~/Scripts/custom.min.js"></script>
+    <!-- iCheck -->
+    <script src="~/vendors/iCheck/icheck.min.js"></script>
 
     <!-- Datatables -->
     <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 
-    <!-- Esecute Datatables <thead><tbody> -->
-    <script>
-        $(document).ready(function () {
-            $('#myTable').DataTable();
-        });
-    </script>
+    <!-- Custom Theme Scripts -->
+    <script src="~/Scripts/custom.min.js"></script>
 
     @RenderSection("scripts", required: false)
 </body>
