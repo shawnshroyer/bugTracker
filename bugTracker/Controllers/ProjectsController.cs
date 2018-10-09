@@ -67,12 +67,12 @@ namespace bugTracker.Controllers
 
         // GET: Projects/Edit/5
         [Authorize(Roles = "Administrator, Project Manager")]
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            //if (id == null)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
 
             Project project = db.Projects.Find(id);
 
@@ -80,8 +80,11 @@ namespace bugTracker.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.Users = userHelper.ListAllUsers().OrderBy(u => u.LastName);
-            
+            //ViewBag.Users = userHelper.ListAllUsers().OrderBy(u => u.LastName);
+            //ViewBag.UserOn = new MultiSelectList(db.Users.ToList(), "Id", "UserName");
+            ViewBag.UserOn = new MultiSelectList(projectHelper.UsersOnProject(id), "Id", "UserName");
+            ViewBag.UserOff = new MultiSelectList(projectHelper.UsersNotOnProject(id), "Id", "UserName");
+
             return View(project);
         }
 
@@ -90,10 +93,26 @@ namespace bugTracker.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Details,Created")] Project project, IList<SelectList> userId)
+        public ActionResult Edit([Bind(Include = "Id,Name,Details,Created")] Project project, List<string> UserOff, List<string> UserOn)
         {
             if (ModelState.IsValid)
             {
+                if (!(UserOff is null))
+                {
+                    foreach (var user in UserOff)
+                    {
+                        projectHelper.AddUserToProject(user, project.Id);
+                    }
+                }
+
+                if (!(UserOn is null))
+                {
+                    foreach (var user in UserOn)
+                    {
+                        projectHelper.RemoveUserFromProject(user, project.Id);
+                    }
+                }
+
                 db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();
 
