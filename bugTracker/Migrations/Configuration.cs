@@ -119,6 +119,11 @@ namespace bugTracker.Migrations
 
             userId = userManager.FindByEmail("submitter@mailinator.com").Id;
             userManager.AddToRole(userId, "Submitter");
+
+            //TODO: add these items for seeding
+            //TicketTypeId
+            //TicketPriorityId
+            //TicketStatusId
         }
     }
 }

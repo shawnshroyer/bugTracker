@@ -9,7 +9,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Gentelella Alela! | </title>
+    <title>Bug Tracking</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="~/images/bug-icon-64x64.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/images/bug-icon-64x64.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="~/images/bug-icon-64x64.png">
 
     <!-- Bootstrap -->
     <link href="~/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -28,7 +31,8 @@
     <link href="~/Content/custom.min.css" rel="stylesheet">
 
     <!-- Datatables -->
-    <link href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.18/b-1.5.4/datatables.min.css" />
+
 
     <!-- My Personal Customizations-->
     <link href="~/Content/bugTracker.css" rel="stylesheet" />
@@ -41,7 +45,7 @@
             <div class="col-md-3 left_col">
                 <div class="left_col scroll-view">
                     <div class="navbar nav_title" style="border: 0;">
-                        <a href="index.html" class="site_title"><i class="fa fa-bug"></i> <span>Gentelella Alela!</span></a>
+                        <a href=@Url.Action("Index") class="site_title"><i class="fa fa-bug"></i><span id="titleSpan"> Destroyer Bug Tracking</span></a>
                     </div>
                     <div class="clearfix"></div>
 
@@ -75,191 +79,192 @@
                                 <li>
                                     <a><i class="fa fa-ticket"></i> Tickets <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        @if (User.IsInRole("Submitter"))
+                                        @if (User.IsInRole("Submitter") || User.IsInRole("Administrator"))
                                         {
                                             <li>@Html.ActionLink("Create", "Create", "Tickets")</li>
                                         }
-                                        <li
-                                            >@Html.ActionLink("View My Tickets", "Index", "Tickets")
-                                        </li>
                                         <li>
-                                            @Html.ActionLink("View All", "Index", "Tickets")
-                                        </li>
-                                    </ul>
+                                            @Html.ActionLink("View My Tickets", "Index", "Tickets")
+                                    </li>
+                                    <li>
+                                        @Html.ActionLink("View All", "Index", "Tickets")
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a><i class="fa fa-briefcase"></i> Projects <span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    @if (User.IsInRole("Administrator") || User.IsInRole("Project Manager"))
+                                    {
+                                        <li>@Html.ActionLink("Create Project", "Create", "Projects")</li>
+                                    }
+
+                                    <li>@Html.ActionLink("View Projects", "Index", "Projects")</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- /sidebar menu -->
+            </div>
+        </div>
+
+        <!-- top navigation -->
+        <div class="top_nav">
+            <div class="nav_menu">
+                <nav>
+                    <div class="nav toggle">
+                        <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                    </div>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="">
+                            <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                <img src="~/images/img.jpg" alt="">@User.Identity.FullName()
+                                <span class=" fa fa-angle-down"></span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-usermenu pull-right">
+                                <li>
+                                    @Html.ActionLink("Profile", "UserProfile", "Manage")
                                 </li>
                                 <li>
-                                    <a><i class="fa fa-briefcase"></i> Projects <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        @if (User.IsInRole("Administrator") || User.IsInRole("Project Manager"))
-                                        {
-                                            <li>@Html.ActionLink("Create Project", "Create", "Projects")</li>
-                                        }
-
-                                        <li>@Html.ActionLink("View Projects", "Index", "Projects")</li>
-                                    </ul>
+                                    @Html.ActionLink("Settings", "RoleAssignment", "Manage")
+                                </li>
+                                <li>
+                                    @Html.Partial("_LoginPartial")
                                 </li>
                             </ul>
-                        </div>
-                    </div>
+                        </li>
 
-                    <!-- /sidebar menu -->
-                </div>
+                        <!-- Message Notifications -->
+                        <li role="presentation" class="dropdown">
+                            <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-envelope-o"></i>
+                                <span class="badge bg-green">6</span>
+                            </a>
+                            <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                                <li>
+                                    <a>
+                                        <span class="image"><img src="~/images/img.jpg" alt="Profile Image" /></span>
+                                        <span>
+                                            <span>John Smith</span>
+                                            <span class="time">3 mins ago</span>
+                                        </span>
+                                        <span class="message">
+                                            Film festivals used to be do-or-die moments for movie makers. They were where...
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a>
+                                        <span class="image"><img src="~/images/img.jpg" alt="Profile Image" /></span>
+                                        <span>
+                                            <span>John Smith</span>
+                                            <span class="time">3 mins ago</span>
+                                        </span>
+                                        <span class="message">
+                                            Film festivals used to be do-or-die moments for movie makers. They were where...
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a>
+                                        <span class="image"><img src="~/images/img.jpg" alt="Profile Image" /></span>
+                                        <span>
+                                            <span>John Smith</span>
+                                            <span class="time">3 mins ago</span>
+                                        </span>
+                                        <span class="message">
+                                            Film festivals used to be do-or-die moments for movie makers. They were where...
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a>
+                                        <span class="image"><img src="~/images/img.jpg" alt="Profile Image" /></span>
+                                        <span>
+                                            <span>John Smith</span>
+                                            <span class="time">3 mins ago</span>
+                                        </span>
+                                        <span class="message">
+                                            Film festivals used to be do-or-die moments for movie makers. They were where...
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <div class="text-center">
+                                        <a>
+                                            <strong>See All Alerts</strong>
+                                            <i class="fa fa-angle-right"></i>
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- End Message Notification -->
+
+                    </ul>
+                </nav>
             </div>
-
-            <!-- top navigation -->
-            <div class="top_nav">
-                <div class="nav_menu">
-                    <nav>
-                        <div class="nav toggle">
-                            <a id="menu_toggle"><i class="fa fa-bars"></i></a>
-                        </div>
-                        <ul class="nav navbar-nav navbar-right">
-                            <li class="">
-                                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                    <img src="~/images/img.jpg" alt="">@User.Identity.FullName()
-                                    <span class=" fa fa-angle-down"></span>
-                                </a>
-                                <ul class="dropdown-menu dropdown-usermenu pull-right">
-                                    <li>
-                                        @Html.ActionLink("Profile", "UserProfile", "Manage")
-                                    </li>
-                                    <li>
-                                        @Html.ActionLink("Settings", "RoleAssignment", "Manage")
-                                    </li>
-                                    <li>
-                                        @Html.Partial("_LoginPartial")
-                                    </li>
-                                </ul>
-                            </li>
-
-                            <!-- Message Notifications -->
-                            <li role="presentation" class="dropdown">
-                                <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
-                                    <i class="fa fa-envelope-o"></i>
-                                    <span class="badge bg-green">6</span>
-                                </a>
-                                <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
-                                    <li>
-                                        <a>
-                                            <span class="image"><img src="~/images/img.jpg" alt="Profile Image" /></span>
-                                            <span>
-                                                <span>John Smith</span>
-                                                <span class="time">3 mins ago</span>
-                                            </span>
-                                            <span class="message">
-                                                Film festivals used to be do-or-die moments for movie makers. They were where...
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a>
-                                            <span class="image"><img src="~/images/img.jpg" alt="Profile Image" /></span>
-                                            <span>
-                                                <span>John Smith</span>
-                                                <span class="time">3 mins ago</span>
-                                            </span>
-                                            <span class="message">
-                                                Film festivals used to be do-or-die moments for movie makers. They were where...
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a>
-                                            <span class="image"><img src="~/images/img.jpg" alt="Profile Image" /></span>
-                                            <span>
-                                                <span>John Smith</span>
-                                                <span class="time">3 mins ago</span>
-                                            </span>
-                                            <span class="message">
-                                                Film festivals used to be do-or-die moments for movie makers. They were where...
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a>
-                                            <span class="image"><img src="~/images/img.jpg" alt="Profile Image" /></span>
-                                            <span>
-                                                <span>John Smith</span>
-                                                <span class="time">3 mins ago</span>
-                                            </span>
-                                            <span class="message">
-                                                Film festivals used to be do-or-die moments for movie makers. They were where...
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <div class="text-center">
-                                            <a>
-                                                <strong>See All Alerts</strong>
-                                                <i class="fa fa-angle-right"></i>
-                                            </a>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </li>
-                            <!-- End Message Notification -->
-
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-            <!-- /top navigation -->
-
-            <div class="right_col" role="main">
-                <div class="">
-                    @RenderBody()
-                </div>
-            </div>
-
-            <!-- footer content -->
-            <footer>
-                <div class="pull-right">
-                    Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
-                </div>
-                <div class="clearfix"></div>
-            </footer>
-            <!-- /footer content -->
         </div>
+        <!-- /top navigation -->
+
+        <div class="right_col" role="main">
+            <div class="">
+                @RenderBody()
+            </div>
+        </div>
+
+        <!-- footer content -->
+        <footer>
+            <div class="pull-right">
+                Destroyer Bug Tracking &copy;@DateTime.Now.Year
+            </div>
+            <div class="clearfix"></div>
+        </footer>
+        <!-- /footer content -->
     </div>
+</div>
 
-    <!-- jQuery -->
-    <script src="~/vendors/jquery/dist/jquery.min.js"></script>
-    <!-- Bootstrap -->
-    <script src="~/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
-    <!-- FastClick -->
-    <script src="~/vendors/fastclick/lib/fastclick.js"></script>
-    <!-- NProgress -->
-    <script src="~/vendors/nprogress/nprogress.js"></script>
-    <!-- Chart.js -->
-    <script src="~/vendors/Chart.js/dist/Chart.min.js"></script>
-    <!-- jQuery Sparklines -->
-    <script src="~/vendors/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
-    <!-- Flot -->
-    <script src="~/vendors/Flot/jquery.flot.js"></script>
-    <script src="~/vendors/Flot/jquery.flot.pie.js"></script>
-    <script src="~/vendors/Flot/jquery.flot.time.js"></script>
-    <script src="~/vendors/Flot/jquery.flot.stack.js"></script>
-    <script src="~/vendors/Flot/jquery.flot.resize.js"></script>
-    <!-- Flot plugins -->
-    <script src="~/vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
-    <script src="~/vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
-    <script src="~/vendors/flot.curvedlines/curvedLines.js"></script>
-    <!-- DateJS -->
-    <script src="~/vendors/DateJS/build/date.js"></script>
-    <!-- bootstrap-daterangepicker -->
-    <script src="~/vendors/moment/min/moment.min.js"></script>
-    <script src="~/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
-    <!-- Bootstrap-Progressbar -->
-    <script src="~/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
-    <!-- iCheck -->
-    <script src="~/vendors/iCheck/icheck.min.js"></script>
+<!-- jQuery -->
+<script src="~/vendors/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="~/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- FastClick -->
+<script src="~/vendors/fastclick/lib/fastclick.js"></script>
+<!-- NProgress -->
+<script src="~/vendors/nprogress/nprogress.js"></script>
+<!-- Chart.js -->
+<script src="~/vendors/Chart.js/dist/Chart.min.js"></script>
+<!-- jQuery Sparklines -->
+<script src="~/vendors/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
+<!-- Flot -->
+<script src="~/vendors/Flot/jquery.flot.js"></script>
+<script src="~/vendors/Flot/jquery.flot.pie.js"></script>
+<script src="~/vendors/Flot/jquery.flot.time.js"></script>
+<script src="~/vendors/Flot/jquery.flot.stack.js"></script>
+<script src="~/vendors/Flot/jquery.flot.resize.js"></script>
+<!-- Flot plugins -->
+<script src="~/vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+<script src="~/vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+<script src="~/vendors/flot.curvedlines/curvedLines.js"></script>
+<!-- DateJS -->
+<script src="~/vendors/DateJS/build/date.js"></script>
+<!-- bootstrap-daterangepicker -->
+<script src="~/vendors/moment/min/moment.min.js"></script>
+<script src="~/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+<!-- Bootstrap-Progressbar -->
+<script src="~/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+<!-- iCheck -->
+<script src="~/vendors/iCheck/icheck.min.js"></script>
 
-    <!-- Datatables -->
-    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<!-- Datatables -->
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs/dt-1.10.18/b-1.5.4/datatables.min.js"></script>
 
-    <!-- Custom Theme Scripts -->
-    <script src="~/Scripts/custom.min.js"></script>
 
-    @RenderSection("scripts", required: false)
+<!-- Custom Theme Scripts -->
+<script src="~/Scripts/custom.min.js"></script>
+
+@RenderSection("scripts", required: false)
 </body>
 </html>

@@ -250,6 +250,7 @@
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="images\bug-icon-64x64.png" />
     <Content Include="images\img.jpg" />
     <Content Include="images\user.png" />
     <Content Include="Scripts\bootstrap.js" />
@@ -4603,7 +4604,6 @@
     <Content Include="vendors\validator\.gitignore" />
     <Content Include="vendors\validator\README.md" />
     <Content Include="vendors\validator\validator.jquery.json" />
-    <Content Include="Views\Shared\AdminLayout.cshtml" />
     <Content Include="Views\Shared\_AdminLayout.cshtml" />
     <Content Include="Views\Account\LoginRegister.cshtml" />
     <Content Include="Views\Account\Login - old.cshtml" />

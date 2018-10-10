@@ -23,6 +23,9 @@ namespace bugTracker.Controllers
         public ActionResult Index()
         {
             var tickets = db.Tickets.Include(t => t.AssignedToUser).Include(t => t.OwnerUser).Include(t => t.Project).Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType);
+
+            //ViewBag.PMProjects =
+
             return View(tickets.ToList());
         }
 
@@ -42,7 +45,7 @@ namespace bugTracker.Controllers
         }
 
         // GET: Tickets/Create
-        [Authorize(Roles = "Submitter")]
+        [Authorize(Roles = "Submitter, Administrator")]
         public ActionResult Create()
         {
             ViewBag.AssignedToUserId = new SelectList(db.Users, "Id", "FirstName");
