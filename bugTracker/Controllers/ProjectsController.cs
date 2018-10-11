@@ -80,10 +80,19 @@ namespace bugTracker.Controllers
             {
                 return HttpNotFound();
             }
-            //ViewBag.Users = userHelper.ListAllUsers().OrderBy(u => u.LastName);
-            //ViewBag.UserOn = new MultiSelectList(db.Users.ToList(), "Id", "UserName");
-            ViewBag.UserOn = new MultiSelectList(projectHelper.UsersOnProject(id), "Id", "UserName");
-            ViewBag.UserOff = new MultiSelectList(projectHelper.UsersNotOnProject(id), "Id", "UserName");
+
+            ViewBag.UserOn = new MultiSelectList(projectHelper.UsersInProjNotInRole(id, "Project Manager"), "Id", "UserName");
+            ViewBag.UserOff = new MultiSelectList(projectHelper.UsersNotOnProjOrInRole(id, "Project Manager"), "Id", "UserName");
+
+            foreach (var pm in userHelper.UsersInRole("Project Manager"))
+            {
+                if(projectHelper.IsUserOnProject(pm.Id, id))
+                {
+                    ViewBag.CurrentPm = pm.UserName;
+                }
+            }
+
+            ViewBag.PMs = new SelectList(userHelper.UsersInRole("Project manager"), "Id", "UserName");
 
             return View(project);
         }
@@ -93,7 +102,7 @@ namespace bugTracker.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Details,Created")] Project project, List<string> UserOff, List<string> UserOn)
+        public ActionResult Edit([Bind(Include = "Id,Name,Details,Created")] Project project, List<string> UserOff, List<string> UserOn, string PMs)
         {
             if (ModelState.IsValid)
             {
@@ -113,6 +122,14 @@ namespace bugTracker.Controllers
                     }
                 }
 
+                if (!(string.IsNullOrEmpty(PMs)))
+                {
+                    if(!(projectHelper.IsUserOnProject(PMs, project.Id)))
+                    {
+                        projectHelper.AddUserToProject(PMs, project.Id);
+                    }
+                }
+
                 db.Entry(project).State = EntityState.Modified;
                 db.SaveChanges();
 
@@ -129,7 +146,9 @@ namespace bugTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Project project = db.Projects.Find(id);
+
             if (project == null)
             {
                 return HttpNotFound();
@@ -142,6 +161,8 @@ namespace bugTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            //TODO: Remove all users from project
+
             Project project = db.Projects.Find(id);
             db.Projects.Remove(project);
             db.SaveChanges();

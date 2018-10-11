@@ -13,7 +13,8 @@ namespace bugTracker.Helpers
     public class ProjectsHelper
     {
 
-        ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
+        private UserRolesHelper URHelper = new UserRolesHelper();
 
         public bool IsUserOnProject(string userId, int projectId)
         {
@@ -64,6 +65,43 @@ namespace bugTracker.Helpers
         public ICollection<ApplicationUser> UsersNotOnProject(int projectId)
         {
             return db.Users.Where(u => u.Projects.All(p => p.Id != projectId)).ToList();
+        }
+
+        public string GetProjectManager(int projectId)
+        {
+            var projUsers = UsersOnProject(projectId);
+            foreach (var user in projUsers)
+            {
+                if (URHelper.IsUserInRole(user.Id, "Project Manager"))
+                {
+                    return $"{user.LastName}, {user.FirstName}";
+                }
+            }
+            return "Unassigned";
+        }
+
+        public ICollection<ApplicationUser> UsersNotOnProjOrInRole(int projectId, string role)
+        {
+            var userList = UsersNotOnProject(projectId).ToList();
+
+            foreach (var usr in URHelper.UsersInRole(role))
+            {
+                var count = userList.RemoveAll(u => u.Id == usr.Id);
+            }
+
+            return userList;
+        }
+
+        public ICollection<ApplicationUser> UsersInProjNotInRole(int projectId, string role)
+        {
+            var userList = UsersOnProject(projectId).ToList();
+
+            foreach (var usr in URHelper.UsersInRole(role))
+            {
+                var count = userList.RemoveAll(u => u.Id == usr.Id);
+            }
+
+            return userList;
         }
     }
 } 

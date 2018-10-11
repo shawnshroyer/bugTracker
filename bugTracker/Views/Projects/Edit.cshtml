@@ -46,25 +46,31 @@
                                 <div class="x_content">
                                     <div class="">
                                         @*<ul class="to_do">
-                                            @foreach (var user in ViewBag.Users)
-                                            {
-                                                <li>
-                                                    @if (projectHelper.IsUserOnProject(user.Value, Model.Id))
-                                                    {
-                                                        @Html.CheckBox("userId", true, new { @id = $"{user.Id}", @value =$"{user.Id}", @class = "flat" })
-                                                        @Html.Label($"{user.LastName}, {user.FirstName}")
-                                                    }
-                                                    else
-                                                    {
-                                                        @Html.CheckBox("userId", false, new {@id=$"{user.Id}", @value = $"{user.Id}", @class = "flat" })
-                                                        @Html.Label($"{user.LastName}, {user.FirstName}")
-                                                    }
+                                @foreach (var user in ViewBag.Users)
+                                {
+                                    <li>
+                                        @if (projectHelper.IsUserOnProject(user.Value, Model.Id))
+                                        {
+                                            @Html.CheckBox("userId", true, new { @id = $"{user.Id}", @value =$"{user.Id}", @class = "flat" })
+                                            @Html.Label($"{user.LastName}, {user.FirstName}")
+                                        }
+                                        else
+                                        {
+                                            @Html.CheckBox("userId", false, new {@id=$"{user.Id}", @value = $"{user.Id}", @class = "flat" })
+                                            @Html.Label($"{user.LastName}, {user.FirstName}")
+                                        }
 
-                                                </li>
-                                            }
-                                        </ul>*@
-
-                                        @Html.ListBox("UserOff")
+                                    </li>
+                                }
+                            </ul>*@
+                                        @if (ViewBag.UserOff.Items.Count == 0)
+                                        {
+                                            <div class="text-center">No Users to display</div>
+                                        }
+                                        else
+                                        {
+                                            @Html.ListBox("UserOff", null, new { @class = "customListBox" })
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -78,7 +84,35 @@
                                 </div>
                                 <div class="x_content">
                                     <div class="">
-                                        @Html.ListBox("UserOn")
+                                        @if (ViewBag.UserOn.Items.Count == 0)
+                                        {
+                                            <div class="text-center">No Users to display</div>
+                                        }
+                                        else
+                                        {
+                                            @Html.ListBox("UserOn", null, new { @class = "customListBox" })
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="x_panel">
+                                <div class="x_title">
+                                    <h2>Assign New Project Manager <small>No selection will leave current project manager assigned</small></h2>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+                                    <div class="">
+                                        @if (!(ViewBag.CurrentPm is null))
+                                        {
+                                            <div class="row">The Current PM for this project is: @ViewBag.CurrentPm</div>
+                                        }
+                                        <div class="row">
+                                            @Html.DropDownList("PMs", null, "-- Select a PM --", htmlAttributes: new { @class = "form-control" })
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -90,7 +124,7 @@
                             <input id="editPrjBtn" type="button" value="Save" class="btn btn-default btn-success" />
                         </div>
                     </div>
-                    </div>
+                </div>
                 </div>
         </div>
     </div>
@@ -106,8 +140,12 @@
             $('<input type="hidden" name="Id" value=@Model.Created>').appendTo("#cngUserForm");
             $("#editProjectForm").submit();
         });
+
+        $(function () {
+            var length = parseInt($(".customListBox option").length);
+            $(".customListBox").attr("size", length < 10 ? length : 10);
+        });
     </script>
 
-    @Scripts.Render("~/bundles/jqueryval")\
-
+    @Scripts.Render("~/bundles/jqueryval")
 }
