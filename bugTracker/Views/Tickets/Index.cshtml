@@ -17,13 +17,17 @@
                 <thead>
                     <tr>
                         <th>
-                            @Html.DisplayNameFor(model => model.AssignedToUser.FirstName)
+                            @*@Html.DisplayNameFor(model => model.AssignedToUser.FirstName)*@
+                            @Html.DisplayName("Developer")
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.OwnerUser.FirstName)
+                            @*@Html.DisplayNameFor(model => model.OwnerUser.FirstName)*@
+                            @Html.DisplayName("Submitter")
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.Project.Name)
+                            @*@Html.DisplayNameFor(model => model.Project.Name)*@
+                            @Html.DisplayName("Project")
+
                         </th>
                         <th>
                             @Html.DisplayNameFor(model => model.TicketPriority.Priority)
@@ -40,9 +44,11 @@
                         <th>
                             @Html.DisplayNameFor(model => model.Description)
                         </th>
+
                         <th>
-                            @Html.DisplayNameFor(model => model.Created)
+                           @Html.DisplayNameFor(model => model.Created)
                         </th>
+
                         <th>
                             @Html.DisplayNameFor(model => model.Updated)
                         </th>
@@ -79,7 +85,7 @@
                                 @Html.DisplayFor(modelItem => item.Description)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Created)
+                                @DateTime.Parse(Html.DisplayFor(modelItem => item.Created).ToString()).ToString("f")
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Updated)
@@ -97,34 +103,81 @@
     </div>
 </div>
 
-<!-- Esecute Datatables <thead><tbody> -->
+<!-- Execute Datatables <thead><tbody> -->
 @section scripts {
     <script>
         $(document).ready(function () {
-            var table = $('#ticketTbl').DataTable();
+            var table = $('#ticketTbl').DataTable({
+                "columnDefs": [{ "visible": true, "targets": 2 }],
+                "order": [[2, 'asc']],
+                "displayLength": 25,
+                "drawCallback": function (settings) {
+                    var api = this.api();
+                    if (!(api.column(2).visible())) {
+                        //var api = this.api();
+                        var rows = api.rows({ page: 'current' }).nodes();
+                        var last = null;
 
-            //Developer
-            $('<input type="button" id="assignedBtn" value="Assigned to me" />').appendTo("#contentDiv");
+                        api.column(2, { page: 'current' }).data().each(function (group, i) {
+                            if (last !== group) {
+                                $(rows).eq(i).before(
+                                    '<tr class="group"><td colspan="5">' + group + '</td></tr>'
+                                );
 
-            //Developer and Project Manager
-            $('<input type="button" id="myPrjViewBtn" value="Tickets on my Projects" />').appendTo("#contentDiv");
+                                last = group;
+                            }
+                        });
+                    }
 
-            //submitter
-            $('<input type="button" id="ticketsOwnBtn" value="Tickets owned by me" />').appendTo("#contentDiv");
+                }
+            });
 
+            var admin = '@(User.IsInRole("Administrator") ? "true" : "false")';
+            var sub = '@(User.IsInRole("Submitter") ? "true" : "false")';
+            var dev = '@(User.IsInRole("Developer") ? "true" : "false")';
+            var pm = '@(User.IsInRole("Project Manager") ? "true" : "false")';
+
+            if (dev === "true" || admin === "true") {
+                //Developer
+                $('<input type="button" id="assignedBtn" value="Assigned to me" />').appendTo("#contentDiv");
+            }
+
+            if (dev === "true" || pm === "true" || admin === "true") {
+                //Developer and Project Manager
+                $('<input type="button" id="myPrjViewBtn" value="Tickets on my Projects" />').appendTo("#contentDiv");
+            }
+
+            if ( sub === "true" || admin === "true")
+            {
+                //Submitter
+                $('<input type="button" id="ticketsOwnBtn" value="Tickets owned by me" />').appendTo("#contentDiv");
+            }
+
+            //reset
+            $('<input type="button" id="resetBtn" value="Show All" />').appendTo("#contentDiv");
+
+            //Developer Owned Tickets
             $('#assignedBtn').on('click', function () {
-                alert("test");
-                table.columns(4).search("").draw();
-            });
-
-            $('#myPrjViewBtn').on('click', function () {
                 var result = @Html.Raw(Json.Encode(User.Identity.FirstName().ToString()));
-                table.columns(2).search("").draw();
+                table.columns().visible(true).search("");
+                table.columns(0).search(result).draw();
             });
 
+            //Show Tickets by Project
+            $('#myPrjViewBtn').on('click', function () {
+                table.columns(2).visible(false).draw();
+            });
+
+            //Submitter View Tickets Owned
             $('#ticketsOwnBtn').on('click', function () {
                 var result = @Html.Raw(Json.Encode(User.Identity.FirstName().ToString()));
+                table.columns().visible(true).search("");
                 table.column(1).search(result).draw();
+            });
+
+            //Reset Table
+            $('#resetBtn').on('click', function () {
+                table.columns().visible(true).search("").draw();
             });
         });
     </script>

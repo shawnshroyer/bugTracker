@@ -137,13 +137,13 @@
     <script>
         $("#editPrjBtn").click(function () {
             $('<input type="hidden" name="Id" value=@Model.Id>').appendTo("#cngUserForm");
-            $('<input type="hidden" name="Id" value=@Model.Created>').appendTo("#cngUserForm");
+            $('<input type="hidden" name="Created" value=@Model.Created>').appendTo("#cngUserForm");
             $("#editProjectForm").submit();
         });
 
         $(function () {
             var length = parseInt($(".customListBox option").length);
-            $(".customListBox").attr("size", length < 10 ? length : 10);
+            $(".customListBox").attr("size", length > 10 ? length : 10);
         });
     </script>
 
