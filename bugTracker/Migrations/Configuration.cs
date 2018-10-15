@@ -124,6 +124,11 @@ namespace bugTracker.Migrations
             //TicketTypeId
             //TicketPriorityId
             //TicketStatusId
+
+            //if (!context.TicketTypes.Any(r => r.Type == ""))
+            //{
+            //    roleManger.Create(new IdentityRole { Name = "" });
+            //}
         }
     }
 }

@@ -1,98 +1,242 @@
 ﻿@model bugTracker.Models.Ticket
+@using Microsoft.AspNet.Identity
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Ticket Details";
 }
 
-<h2>Details</h2>
-
-<div>
-    <h4>Ticket</h4>
+    <h4>@ViewBag.Title</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.AssignedToUser.FirstName)
-        </dt>
+    <div class="container">
+        <div class="x_content">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2><span class="fa fa-info-circle"></span> Ticket Information</h2>
+                            <div class="clearfix"></div>
+                        </div>
 
-        <dd>
-            @Html.DisplayFor(model => model.AssignedToUser.FirstName)
-        </dd>
+                        <div class="x_content">
+                            <dl class="dl-horizontal">
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.AssignedToUser.FirstName)
+                                </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.OwnerUser.FirstName)
-        </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.AssignedToUser.FirstName)
+                                </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.OwnerUser.FirstName)
-        </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.OwnerUser.FirstName)
+                                </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Project.Name)
-        </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.OwnerUser.FirstName)
+                                </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Project.Name)
-        </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Project.Name)
+                                </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.TicketPriority.Priority)
-        </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.Project.Name)
+                                </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.TicketPriority.Priority)
-        </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.TicketPriority.Priority)
+                                </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.TicketStatus.Status)
-        </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.TicketPriority.Priority)
+                                </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.TicketStatus.Status)
-        </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.TicketStatus.Status)
+                                </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.TicketType.Type)
-        </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.TicketStatus.Status)
+                                </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.TicketType.Type)
-        </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.TicketType.Type)
+                                </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.TicketType.Type)
+                                </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Title)
-        </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Title)
+                                </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.Title)
+                                </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Description)
+                                </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Created)
-        </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.Description)
+                                </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Created)
-        </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Created)
+                                </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Updated)
-        </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.Created)
+                                </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Updated)
-        </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Updated)
+                                </dt>
 
-    </dl>
-</div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+                                <dd>
+                                    @Html.DisplayFor(model => model.Updated)
+                                </dd>
+                            </dl>
+                            <p>
+                                @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 widget_tally_box">
+                    <div class="x_panel">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="x_title">
+                                    <h2><span class="fa fa-users"></span> Personel Info</h2>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="x_content">
+                                <div class="col-md-4">
+                                    <div class="x_panel">
+                                        <div class="x_content">
+                                            <div class="flex">
+                                                <ul class="list-inline widget_profile_box">
+                                                    <li>
+                                                        <img class="img-circle profile_img cenet" alt="..." src="/images/user.png">
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+                                            <h3 class="name text-center">@Html.DisplayFor(model => model.AssignedToUser.FirstName) @Html.DisplayFor(model => model.AssignedToUser.LastName)</h3>
+
+                                            <h4 class="text-center">Developer</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="x_panel">
+                                        <div class="x_content">
+                                            <div class="flex">
+                                                <ul class="list-inline widget_profile_box">
+                                                    <li>
+                                                        <img class="img-circle profile_img cenet" alt="..." src="/images/user.png">
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+                                            <h3 class="name text-center">Musimbi</h3>
+
+                                            <h4 class="text-center">Program Manager</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="x_panel">
+                                        <div class="x_content">
+                                            <div class="flex">
+                                                <ul class="list-inline widget_profile_box">
+                                                    <li>
+                                                        <img class="img-circle profile_img cenet" alt="..." src="/images/user.png">
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+                                            <h3 class="name text-center">@Html.DisplayFor(model => model.OwnerUser.FirstName) @Html.DisplayFor(model => model.OwnerUser.LastName)</h3>
+
+                                            <h4 class="text-center">Submitter</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2><span class="fa fa-file-text"></span> Attachments</h2>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2><span class="fa fa-comments-o"></span> Comments</h2>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            @using (Html.BeginForm("Create", "TicketComments", FormMethod.Post, htmlAttributes: new { @class = "form" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("TicketId", Model.Id)
+                                @Html.Hidden("UserId", User.Identity.GetUserId())
+
+                                <div class="form-group">
+                                    @Html.Label("Add Comment", new { @class = "control-label" })
+                                    @Html.TextArea("comment", new { @class = "form-control", placeholder = "Comment Body", rows = "4" })
+                                </div>
+
+                                <button class="btn btn-default" type="submit">Submit</button>
+                            }
+                            <hr />
+                            @foreach (var comment in Model.TicketComments)
+                            {
+                                <div class="panel panel-default">
+                                    <div class="panel-heading small">
+                                        @if (User.IsInRole("Administrator"))
+                                        {
+                                            @Html.ActionLink(" [DELETE] ", "Delete", "Comments", new { comment.Id }, null)
+                                        }
+                                    </div>
+
+                                    <div class="panel-body">@comment.Comment</div>
+                                    <div class="panel-footer small">
+                                        Posted: @comment.Created.ToString("f")
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2><span class="fa fa-history"></span> History</h2>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -53,6 +53,8 @@ namespace bugTracker.Controllers
         {
             if (ModelState.IsValid)
             {
+                ticketComment.Created = DateTimeOffset.Now;
+
                 db.TicketComments.Add(ticketComment);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -70,7 +72,9 @@ namespace bugTracker.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             TicketComment ticketComment = db.TicketComments.Find(id);
+
             if (ticketComment == null)
             {
                 return HttpNotFound();

@@ -13,3 +13,17 @@ textarea
 {
     font-size: 16px;
 }
+
+ul.widget_profile_box li:last-child
+{
+    width: 89%;
+}
+
+.widget_tally_box .name {
+    margin: 20px 0 10px 0;
+}
+
+ul.widget_profile_box
+{
+    margin-top: 20px;
+}
