@@ -14,6 +14,7 @@ using System.Net.Mail;
 
 namespace bugTracker.Controllers
 {
+    [RequireHttps]
     [Authorize]
     public class AccountController : Controller
     {
