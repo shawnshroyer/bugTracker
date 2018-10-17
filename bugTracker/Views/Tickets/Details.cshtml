@@ -1,7 +1,10 @@
 ﻿@model bugTracker.Models.Ticket
 @using Microsoft.AspNet.Identity
+@using bugTracker.Helpers
 
 @{
+    TicketHelper ticketHelper = new TicketHelper();
+    ProjectsHelper projectHelper = new ProjectsHelper();
     ViewBag.Title = "Ticket Details";
 }
 
@@ -19,21 +22,6 @@
 
                         <div class="x_content">
                             <dl class="dl-horizontal">
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.AssignedToUser.FirstName)
-                                </dt>
-
-                                <dd>
-                                    @Html.DisplayFor(model => model.AssignedToUser.FirstName)
-                                </dd>
-
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.OwnerUser.FirstName)
-                                </dt>
-
-                                <dd>
-                                    @Html.DisplayFor(model => model.OwnerUser.FirstName)
-                                </dd>
 
                                 <dt>
                                     @Html.DisplayNameFor(model => model.Project.Name)
@@ -145,9 +133,9 @@
                                                 </ul>
                                             </div>
 
-                                            <h3 class="name text-center">Musimbi</h3>
+                                            <h3 class="name text-center">@projectHelper.PMforTicket(Model.ProjectId)</h3>
 
-                                            <h4 class="text-center">Program Manager</h4>
+                                            <h4 class="text-center">Project Manager</h4>
                                         </div>
                                     </div>
                                 </div>
@@ -182,7 +170,44 @@
                             <div class="clearfix"></div>
                         </div>
                         <div class="x_content">
+                            @using (Html.BeginForm("Create", "TicketAttachments", null, FormMethod.Post, new { enctype = "Multipart/form-data", @class = "form" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("TicketId", Model.Id)
+                                @Html.Hidden("UserId", User.Identity.GetUserId())
 
+                                <input name="attachment" type="file" class="form-control" id="fileUpload" />
+                                <br />
+                                @Html.TextArea("TicketDescription", new { @class = "form-control", placeholder = "Add File Details", rows = "2" })
+
+                                <br />
+                                <button class="btn btn-default" type="submit">Submit</button>
+                            }
+
+                            <hr />
+                            @foreach (var attachment in Model.TicketAttachments)
+                            {
+                                <div class="panel panel-default">
+
+                                    @if (User.IsInRole("Administrator"))
+                                    {
+                                        <div class="panel-heading small">
+                                            @Html.ActionLink(" [DELETE] ", "Delete", "Comments", new { attachment.Id }, null)
+                                        </div>
+                                    }
+
+                                    <div class="panel-body">
+                                        <a href='@Url.Content(attachment.FilePath)'>
+                                            <img class="attachmentIcon" src="@ticketHelper.TicketImage(attachment.Title)" />
+                                            @Path.GetFileNameWithoutExtension(attachment.Title)
+                                        </a>
+                                        <br />@attachment.Description
+                                    </div>
+                                    <div class="panel-footer small">
+                                        Posted: @attachment.Created.ToString("f")
+                                    </div>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -210,12 +235,14 @@
                             @foreach (var comment in Model.TicketComments)
                             {
                                 <div class="panel panel-default">
-                                    <div class="panel-heading small">
-                                        @if (User.IsInRole("Administrator"))
-                                        {
+
+                                    @if (User.IsInRole("Administrator"))
+                                    {
+                                        <div class="panel-heading small">
                                             @Html.ActionLink(" [DELETE] ", "Delete", "Comments", new { comment.Id }, null)
-                                        }
-                                    </div>
+                                        </div>
+                                    }
+
 
                                     <div class="panel-body">@comment.Comment</div>
                                     <div class="panel-footer small">

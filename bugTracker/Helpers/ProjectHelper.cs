@@ -103,5 +103,26 @@ namespace bugTracker.Helpers
 
             return userList;
         }
+
+        public string PMforTicket(int id)
+        {
+            foreach (var user in UsersOnProject(id))
+            {
+                if (IsUserOnProject(user.Id, id) && URHelper.IsUserInRole(user.Id, "Project Manager"))
+                {
+                    return $"{user.FirstName} {user.LastName}";
+                }
+            }
+
+            return "Not Assigned";
+        }
     }
-} 
+}
+
+            //foreach (var pm in userHelper.UsersInRole("Project Manager"))
+            //{
+            //    if(projectHelper.IsUserOnProject(pm.Id, id))
+            //    {
+            //        ViewBag.CurrentPm = pm.UserName;
+            //    }
+            //}

@@ -212,7 +212,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\ImageUploadValidator.cs" />
+    <Compile Include="Helpers\UploadValidator.cs" />
     <Compile Include="Helpers\ProjectHelper.cs" />
     <Compile Include="Helpers\StringUtilities.cs" />
     <Compile Include="Helpers\TicketHelper.cs" />
@@ -252,6 +252,15 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="images\bug-icon-64x64.png" />
+    <Content Include="images\icons\doc.png" />
+    <Content Include="images\icons\default.png" />
+    <Content Include="images\icons\visual.png" />
+    <Content Include="images\icons\pdf.png" />
+    <Content Include="images\icons\ppt.png" />
+    <Content Include="images\icons\docx.png" />
+    <Content Include="images\icons\xlsx.png" />
+    <Content Include="images\icons\xls.png" />
+    <Content Include="images\icons\txt.png" />
     <Content Include="images\img.jpg" />
     <Content Include="images\user.png" />
     <Content Include="Scripts\bootstrap.js" />
