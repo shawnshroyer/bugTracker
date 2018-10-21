@@ -105,5 +105,15 @@ namespace bugTracker.Helpers
           
             db.SaveChanges();
         }
+
+        public string GetUserAvatar(string userId)
+        {
+            if (string.IsNullOrEmpty(userManager.FindById(userId).Avatar.ToString()))
+            {
+                return string.Empty;
+            }
+
+            return userManager.FindById(userId).Avatar.ToString();
+        }
     }
 }

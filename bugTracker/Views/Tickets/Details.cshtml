@@ -5,6 +5,7 @@
 @{
     TicketHelper ticketHelper = new TicketHelper();
     ProjectsHelper projectHelper = new ProjectsHelper();
+    UserRolesHelper userHelper = new UserRolesHelper();
     ViewBag.Title = "Ticket Details";
 }
 
@@ -115,7 +116,13 @@
                                             <div class="flex">
                                                 <ul class="list-inline widget_profile_box">
                                                     <li>
-                                                        <img class="img-circle profile_img cenet" alt="..." src="/images/user.png">
+                                                        @if (@userHelper.GetUserAvatar(Model.OwnerUserId) == "")
+                                                        {
+                                                            <img src="~/images/user.png" alt="..." class="img-circle profile_img" />
+                                                        } else {
+                                                            <img src="~/images/@userHelper.GetUserAvatar(Model.AssignedToUserId)" alt="..." class="img-circle profile_img" />
+                                                        }
+                                                        @*<img class="img-circle profile_img cenet" alt="..." src="/images/user.png">*@
                                                     </li>
                                                 </ul>
                                             </div>
@@ -132,7 +139,14 @@
                                             <div class="flex">
                                                 <ul class="list-inline widget_profile_box">
                                                     <li>
-                                                        <img class="img-circle profile_img cenet" alt="..." src="/images/user.png">
+                                                        @if (projectHelper.PMIdforTicket(Model.ProjectId) == "Not Assigned")
+                                                        {
+                                                            <img src="~/images/user.png" alt="..." class="img-circle profile_img">
+                                                        }
+                                                        else
+                                                        {
+                                                            <img src="~/images/@userHelper.GetUserAvatar(projectHelper.PMIdforTicket(Model.ProjectId))" alt="..." class="img-circle profile_img">
+                                                        }
                                                     </li>
                                                 </ul>
                                             </div>
@@ -149,7 +163,15 @@
                                             <div class="flex">
                                                 <ul class="list-inline widget_profile_box">
                                                     <li>
-                                                        <img class="img-circle profile_img cenet" alt="..." src="/images/user.png">
+                                                        @if (userHelper.GetUserAvatar(Model.OwnerUserId) == "")
+                                                        {
+                                                            <img src="~/images/user.png" alt="..." class="img-circle profile_img">
+                                                        }
+                                                        else
+                                                        {
+                                                            <img src="~/images/@userHelper.GetUserAvatar(Model.OwnerUserId)" alt="..." class="img-circle profile_img">
+                                                        }
+                                                        @*<img class="img-circle profile_img cenet" alt="..." src="/images/user.png">*@
                                                     </li>
                                                 </ul>
                                             </div>
@@ -269,31 +291,33 @@
                             <div class="clearfix"></div>
                         </div>
                         <div class="x_content">
+                            
                             <div class="qa-message-list" id="wallmessages">
-                                <div class="message-item" id="m9">
-                                    <div class="message-inner">
-                                        <div class="message-head clearfix">
-                                            <div class="user-detail">
-                                                <h5 class="handle">amiya</h5>
-                                                <div class="post-meta">
-                                                    <div class="asker-meta">
-                                                        <span class="qa-message-what"></span>
-                                                        <span class="qa-message-when">
-                                                            <span class="qa-message-when-data">Nov 24, 2013</span>
-                                                        </span>
-                                                        <span class="qa-message-who">
-                                                            <span class="qa-message-who-pad">by </span>
-                                                            <span class="qa-message-who-data"><a href="./index.php?qa=user&qa_1=amiya">amiya</a></span>
-                                                        </span>
+                                @foreach (var history in Model.TicketHistories) {
+                                    <div class="message-item" id="@history.Id">
+                                        <div class="message-inner">
+                                            <div class="message-head clearfix">
+                                                <div class="user-detail">
+                                                    <h5 class="handle">@history.User.FirstName @history.User.LastName</h5>
+                                                    @* Would like to add a link to user profile - user profile is not designed for this at this time *@
+                                                    <div class="post-meta">
+                                                        <div class="asker-meta">
+                                                            <span class="qa-message-what"></span>
+                                                            <span class="qa-message-when">
+                                                                <span class="qa-message-when-data">@history.Changed.ToString("g")</span>
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="qa-message-content">
-                                            Nice theme . Excellent one .
+                                            <div class="qa-message-content">
+                                                <h4>@history.Property</h4>
+                                                <h5>To: </h5>@history.OldValue
+                                                <h5>From: </h5>@history.NewValue
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                }
                             </div>
                         </div>
                     </div>

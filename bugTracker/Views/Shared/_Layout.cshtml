@@ -56,7 +56,12 @@
                     <!-- menu profile quick info -->
                     <div class="profile clearfix">
                         <div class="profile_pic">
-                            <img src="~/images/img.jpg" alt="..." class="img-circle profile_img">
+                            @if (string.IsNullOrEmpty(User.Identity.Avatar()))
+                            {
+                                <img src="~/images/user.png" alt="..." class="img-circle profile_img">
+                            } else {
+                                <img src="~/images/@User.Identity.Avatar()" alt="..." class="img-circle profile_img">
+                            }
                         </div>
                         <div class="profile_info">
                             <span>Welcome,</span>
@@ -121,16 +126,26 @@
                         <ul class="nav navbar-nav navbar-right">
                             <li class="">
                                 <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                    <img src="~/images/img.jpg" alt="">@User.Identity.FullName()
+                                    @if (string.IsNullOrEmpty(User.Identity.Avatar()))
+                                    {
+                                        <img src="~/images/user.png" alt="">
+                                    }
+                                    else
+                                    {
+                                        <img src="~/images/@User.Identity.Avatar()" alt="">
+                                    }@User.Identity.FullName()
                                     <span class=" fa fa-angle-down"></span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-usermenu pull-right">
                                     <li>
                                         @Html.ActionLink("Profile", "UserProfile", "Manage")
                                     </li>
-                                    <li>
-                                        @Html.ActionLink("Settings", "RoleAssignment", "Manage")
-                                    </li>
+                                    @if (User.IsInRole("Administrator"))
+                                    {
+                                        <li>
+                                            @Html.ActionLink("Settings", "RoleAssignment", "Manage")
+                                        </li>
+                                    }
                                     <li>
                                         @Html.Partial("_LoginPartial")
                                     </li>

@@ -124,6 +124,8 @@ namespace bugTracker.Controllers
             {
                 var oldTicket = db.Tickets.AsNoTracking().FirstOrDefault(t => t.Id == ticket.Id);
 
+                ticket.RecordHistory(oldTicket);
+
                 ticket.Updated = DateTimeOffset.Now;
                 db.Entry(ticket).State = EntityState.Modified;
                 db.SaveChanges();

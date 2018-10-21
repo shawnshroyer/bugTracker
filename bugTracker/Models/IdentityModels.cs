@@ -48,7 +48,7 @@ namespace bugTracker.Models
             userIdentity.AddClaim(new Claim("LastName", this.LastName));
             userIdentity.AddClaim(new Claim("DisplayName", this.DisplayName));
             userIdentity.AddClaim(new Claim("FullName", $"{this.FirstName} {this.LastName}"));
-            //userIdentity.AddClaim(new Claim("Avatar", this.Avatar));
+            userIdentity.AddClaim(new Claim("Avatar", this.Avatar));
 
             return userIdentity;
         }

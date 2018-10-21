@@ -1,4 +1,6 @@
-﻿@model bugTracker.Models.UserProfileViewModel
+﻿@using bugTracker.Extensions
+@model bugTracker.Models.UserProfileViewModel
+
 @{
     ViewBag.Title = "User Profile";
 }
@@ -12,7 +14,15 @@
                     <div class="profile_img">
                         <div id="crop-avatar">
                             <!-- Current avatar -->
-                            <img class="img-responsive avatar-view" src="~/images/user.png" alt="Avatar" title="Change the avatar">
+                            @if (string.IsNullOrEmpty(User.Identity.Avatar()))
+                            {
+                                <img class="img-responsive avatar-view" src="~/images/user.png" alt="Avatar" title="Change the avatar">
+                            }
+                            else
+                            {
+                                <img class="img-responsive avatar-view" src="~/images/@User.Identity.Avatar()" alt="Avatar" title="Change the avatar">
+                            }
+
                         </div>
                     </div>
                     <h3>@Model.CurrentUser.DisplayName</h3>

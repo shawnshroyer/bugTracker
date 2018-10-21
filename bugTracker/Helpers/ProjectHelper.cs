@@ -116,6 +116,19 @@ namespace bugTracker.Helpers
 
             return "Not Assigned";
         }
+
+        public string PMIdforTicket(int id)
+        {
+            foreach (var user in UsersOnProject(id))
+            {
+                if (IsUserOnProject(user.Id, id) && URHelper.IsUserInRole(user.Id, "Project Manager"))
+                {
+                    return user.Id;
+                }
+            }
+
+            return "Not Assigned";
+        }
     }
 }
 

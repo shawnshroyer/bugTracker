@@ -264,6 +264,7 @@
     <Content Include="images\icons\xls.png" />
     <Content Include="images\icons\txt.png" />
     <Content Include="images\img.jpg" />
+    <Content Include="images\Shawn_Shroyer_bw_croped.png" />
     <Content Include="images\user.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
