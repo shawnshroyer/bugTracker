@@ -8,7 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using bugTracker.Models;
 using bugTracker.Helpers;
-
+using Microsoft.AspNet.Identity;
 
 namespace bugTracker.Controllers
 {
@@ -21,8 +21,19 @@ namespace bugTracker.Controllers
         private ProjectsHelper projectHelper = new ProjectsHelper();
 
         // GET: Projects
+        
         public ActionResult Index()
         {
+            var projects = projectHelper.ListUserProjects(User.Identity.GetUserId()).ToList();
+            ViewBag.Projects = string.Empty.ToList();
+
+            if (User.IsInRole("Developer") || User.IsInRole("Submitter"))
+            {
+                return View(projects);
+            }
+
+            ViewBag.Projects = projects;
+
             return View(db.Projects.ToList());
         }
 
@@ -79,6 +90,11 @@ namespace bugTracker.Controllers
             Project project = db.Projects.Find(id);
 
             if (project == null)
+            {
+                return HttpNotFound();
+            }
+
+            if (!(projectHelper.IsUserOnProject(User.Identity.GetUserId(), project.Id) && User.IsInRole("Project Manager")) && !(User.IsInRole("Administrator")))
             {
                 return HttpNotFound();
             }

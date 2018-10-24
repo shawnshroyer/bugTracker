@@ -85,13 +85,13 @@
                                 <li>
                                     <a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        <li>@Html.ActionLink("Home","Index","Home", null, null)</li>
+                                        <li>@Html.ActionLink("Home", "Index", "Home", null, null)</li>
                                     </ul>
                                 </li>
                                 <li>
                                     <a><i class="fa fa-ticket"></i> Tickets <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        @if (User.IsInRole("Submitter") || User.IsInRole("Administrator"))
+                                        @if (User.IsInRole("Submitter"))
                                         {
                                             <li>@Html.ActionLink("Create", "Create", "Tickets")</li>
                                         }
@@ -111,6 +111,17 @@
                                         <li>@Html.ActionLink("View Projects", "Index", "Projects")</li>
                                     </ul>
                                 </li>
+                                @if (User.IsInRole("Administrator"))
+                                {
+                                <li>
+                                    <a><i class="fa fa-cogs"></i> Administrative <span class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li>
+                                            @Html.ActionLink("Role Assignments", "RoleAssignment", "Manage")
+                                        </li>
+                                    </ul>
+                                </li>
+                                }
                             </ul>
                         </div>
                     </div>
@@ -144,12 +155,6 @@
                                         <li>
                                             @Html.ActionLink("Profile", "UserProfile", "Manage")
                                         </li>
-                                        @if (User.IsInRole("Administrator"))
-                                        {
-                                            <li>
-                                                @Html.ActionLink("Settings", "RoleAssignment", "Manage")
-                                            </li>
-                                        }
                                         <li>
                                             @Html.Partial("_LoginPartial")
                                         </li>

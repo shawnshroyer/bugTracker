@@ -21,8 +21,10 @@ namespace bugTracker.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
         private UserRolesHelper userHelper = new UserRolesHelper();
         private ProjectsHelper projectHelper = new ProjectsHelper();
+        private TicketHelper ticketHelper = new TicketHelper();
 
         // GET: Tickets
+   
         public ActionResult Index()
         {
             var tickets = db.Tickets.Include(t => t.AssignedToUser).Include(t => t.OwnerUser).Include(t => t.Project).Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType);
@@ -45,16 +47,21 @@ namespace bugTracker.Controllers
                 return HttpNotFound();
             }
 
+            if (ticketHelper.IsUserTicket(User.Identity.GetUserId(), ticket.Id, ticket.ProjectId) || User.IsInRole("Administrator"))
+            {
+                return HttpNotFound();
+            }
+
             return View(ticket);
         }
 
         // GET: Tickets/Create
-        [Authorize(Roles = "Submitter, Administrator")]
+        [Authorize(Roles = "Submitter")]
         public ActionResult Create()
         {
             ViewBag.AssignedToUserId = new SelectList(db.Users, "Id", "FirstName");
             ViewBag.OwnerUserId = new SelectList(db.Users, "Id", "FirstName");
-            ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name");
+            ViewBag.ProjectId = new SelectList(projectHelper.ListUserProjects(User.Identity.GetUserId()), "Id", "Name");
             ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Priority");
             ViewBag.TicketStatusId = new SelectList(db.TicketStatus, "Id", "Status");
             ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Type");
@@ -102,11 +109,20 @@ namespace bugTracker.Controllers
                 return HttpNotFound();
             }
 
-            ViewBag.AssignedToUserId = new SelectList(db.Users, "Id", "CustomData", ticket.AssignedToUserId);
-            ViewBag.OwnerUserId = new SelectList(db.Users, "Id", "CustomData", ticket.OwnerUserId);
+            if (!(ticketHelper.IsUserTicket(User.Identity.GetUserId(), ticket.Id, ticket.ProjectId) || User.IsInRole("Administrator")))
+            {
+                return HttpNotFound();
+            }
+
+            //Only assigned by PMs and can only be occupied by developers
+            ViewBag.AssignedToUserId = new SelectList(userHelper.UsersInRole("Developer"), "Id", "CustomData", ticket.AssignedToUserId);
+
             ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name", ticket.ProjectId);
+
             ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Priority", ticket.TicketPriorityId);
+
             ViewBag.TicketStatusId = new SelectList(db.TicketStatus, "Id", "Status", ticket.TicketStatusId);
+
             ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Type", ticket.TicketTypeId);
 
             return View(ticket);

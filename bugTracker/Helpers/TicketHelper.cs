@@ -8,23 +8,6 @@ using System.Web;
 using System.Data.Entity;
 using System.IO;
 
-//using System.Data;
-//using System.Net;
-//using System.Web.Mvc;
-//using bugTracker.Extensions;
-//using bugTracker.Helpers;
-
-
-//  ViewBag.CurrentDeveloper = projectHelper.
-//  ViewBag.CurrentOwner = new SelectList(db.Users, "Id", "FirstName", ticket.OwnerUserId);
-//  ViewBag.CurrentProject = new SelectList(db.Projects, "Id", "Name", ticket.ProjectId);
-//  ViewBag.CurrentPriority = new SelectList(db.TicketPriorities, "Id", "Priority", ticket.TicketPriorityId);
-//  ViewBag.CurrentStatus = new SelectList(db.TicketStatus, "Id", "Status", ticket.TicketStatusId);
-//  ViewBag.CurrentType = new SelectList(db.TicketTypes, "Id", "Type", ticket.TicketTypeId);
-//var tickets = db.Tickets.Include(t => t.AssignedToUser).Include(t => t.OwnerUser).Include(t => t.Project).Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType);
-
-
-
 namespace bugTracker.Helpers
 {
     public class TicketHelper
@@ -32,6 +15,7 @@ namespace bugTracker.Helpers
         private UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
         private ApplicationDbContext db = new ApplicationDbContext();
         private UserRolesHelper UserHelper = new UserRolesHelper();
+        private ProjectsHelper ProjectHelper = new ProjectsHelper();
 
         public string TicketImage(string file)
         {
@@ -70,6 +54,22 @@ namespace bugTracker.Helpers
                     return "/images/icons/default.png";
             }
 
+        }
+
+        public bool IsUserTicket(string userId, int ticketId, int projectId)
+        {
+            bool result = false;
+            string pmId = ProjectHelper.PMIdforTicket(projectId);
+
+            if (pmId == "Not Assigned")
+            {
+                result = db.Tickets.All(t => t.Id == ticketId && (t.OwnerUserId == userId || t.AssignedToUserId == userId));
+            } else
+            {
+                return true;
+            }
+
+            return result;
         }
     }
 }

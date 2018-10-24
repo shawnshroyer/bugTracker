@@ -345,7 +345,7 @@ namespace bugTracker.Controllers
         //TODO: https://nimblegecko.com/how-to-set-default-selected-value-on-drop-down-list-from-database/
         //
         // GET: /Manage/RoleAssignment
-        [Authorize(Roles = "Administrator")] //TODO: Make sure access via code is blocked
+        [Authorize(Roles = "Administrator")]
         public ActionResult RoleAssignment()
         {
             ViewBag.UserId = new SelectList(db.Users.ToList(), "Id", "CustomData");    
