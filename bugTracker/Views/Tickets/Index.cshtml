@@ -88,7 +88,9 @@
                                 @DateTime.Parse(Html.DisplayFor(modelItem => item.Created).ToString()).ToString("f")
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Updated)
+                                @if (!(string.IsNullOrEmpty(Html.DisplayFor(modelItem => item.Updated).ToString()))) {
+                                @DateTime.Parse(Html.DisplayFor(modelItem => item.Updated).ToString()).ToString("f")
+                                }
                             </td>
                             <td>
                                 @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
@@ -109,7 +111,7 @@
         $(document).ready(function () {
             var table = $('#ticketTbl').DataTable({
                 "columnDefs": [{ "visible": true, "targets": 2 }],
-                "order": [[2, 'asc']],
+                "order": [[7, 'asc']],
                 "displayLength": 25,
                 "drawCallback": function (settings) {
                     var api = this.api();

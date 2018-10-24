@@ -1,25 +1,175 @@
 ﻿@using bugTracker.Models
 @model LoginRegisterViewModel
+
 @{
     ViewBag.Title = "LoginRegister";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<div>
-    <a class="hiddenanchor" id="signup"></a>
-    <a class="hiddenanchor" id="signin"></a>
-    <div class="login_wrapper">
-        <div class="animate form login_form">
-            <section class="login_content">
-                @Html.Partial("Login", Model.Login)
-            </section>
+<div class="container">
+    <div class="col-md-3 title_padding_left">
+        <div class="row">
+            <div class="pricing ui-ribbon-container">
+                <div class="ui-ribbon-wrapper">
+                    <div class="ui-ribbon">
+                        DEMO
+                    </div>
+                </div>
+                <div class="title">
+                    <h2>Login As</h2>
+                    <h1>Administrator</h1>
+                </div>
+                <div class="x_content">
+                    <div class="">
+                        <div class="pricing_features">
+                            <ul class="list-unstyled text-left">
+                                <li><i class="fa fa-check text-success"></i> Limited <strong> download quota</strong></li>
+                                <li><i class="fa fa-check text-success"></i> <strong>Cash on Delivery</strong></li>
+                                <li><i class="fa fa-check text-success"></i> All time <strong> updates</strong></li>
+                                <li><i class="fa fa-times text-danger"></i> <strong>Unlimited</strong> access to all files</li>
+                                <li><i class="fa fa-times text-danger"></i> <strong>Allowed</strong> to be exclusing per sale</li>
+                                <li><i class="fa fa-times text-danger"></i> 2 years access <strong> to all storage locations</strong></li>
+                                <li><i class="fa fa-times text-danger"></i> <strong>Unlimited</strong> storage</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="pricing_footer">
+                        @using (Html.BeginForm("DemoLogin", "Account", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.Hidden("Email", "Admin")
+                            <button type="submit" class="btn btn-success btn-block">Login As Administrator</button>
+                        }
+                    </div>
+                </div>
+            </div>
         </div>
-        <div id="register" class="animate form registration_form">
-            <section class="login_content">
-                @Html.Partial("Register", Model.Register)
-            </section>
+        <div class="row">
+            <div class="pricing ui-ribbon-container">
+                <div class="ui-ribbon-wrapper">
+                    <div class="ui-ribbon">
+                        DEMO
+                    </div>
+                </div>
+                <div class="title">
+                    <h2>Login As</h2>
+                    <h1>Project Manager</h1>
+                </div>
+                <div class="x_content">
+                    <div class="">
+                        <div class="pricing_features">
+                            <ul class="list-unstyled text-left">
+                                <li><i class="fa fa-check text-success"></i> Limited <strong> download quota</strong></li>
+                                <li><i class="fa fa-check text-success"></i> <strong>Cash on Delivery</strong></li>
+                                <li><i class="fa fa-check text-success"></i> All time <strong> updates</strong></li>
+                                <li><i class="fa fa-times text-danger"></i> <strong>Unlimited</strong> access to all files</li>
+                                <li><i class="fa fa-times text-danger"></i> <strong>Allowed</strong> to be exclusing per sale</li>
+                                <li><i class="fa fa-times text-danger"></i> 2 years access <strong> to all storage locations</strong></li>
+                                <li><i class="fa fa-times text-danger"></i> <strong>Unlimited</strong> storage</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="pricing_footer">
+                        @using (Html.BeginForm("DemoLogin", "Account", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.Hidden("Email", "PM")
+                            <button type="submit" class="btn btn-success btn-block">Login As Project Manager</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <a class="hiddenanchor" id="signup"></a>
+        <a class="hiddenanchor" id="signin"></a>
+        <div class="login_wrapper">
+            <div class="animate form login_form">
+                <section class="login_content">
+                    @Html.Partial("Login", Model.Login)
+                </section>
+            </div>
+            <div id="register" class="animate form registration_form">
+                <section class="login_content">
+                    @Html.Partial("Register", Model.Register)
+                </section>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 title_padding_right">
+        <div class="row">
+            <div class="pricing ui-ribbon-container">
+                <div class="ui-ribbon-wrapper">
+                    <div class="ui-ribbon">
+                        DEMO
+                    </div>
+                </div>
+                <div class="title">
+                    <h2>Login As</h2>
+                    <h1>Developer</h1>
+                </div>
+                <div class="x_content">
+                    <div class="">
+                        <div class="pricing_features">
+                            <ul class="list-unstyled text-left">
+                                <li><i class="fa fa-check text-success"></i> Limited <strong> download quota</strong></li>
+                                <li><i class="fa fa-check text-success"></i> <strong>Cash on Delivery</strong></li>
+                                <li><i class="fa fa-check text-success"></i> All time <strong> updates</strong></li>
+                                <li><i class="fa fa-times text-danger"></i> <strong>Unlimited</strong> access to all files</li>
+                                <li><i class="fa fa-times text-danger"></i> <strong>Allowed</strong> to be exclusing per sale</li>
+                                <li><i class="fa fa-times text-danger"></i> 2 years access <strong> to all storage locations</strong></li>
+                                <li><i class="fa fa-times text-danger"></i> <strong>Unlimited</strong> storage</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="pricing_footer">
+                        @using (Html.BeginForm("DemoLogin", "Account", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.Hidden("Email", "Developer")
+                            <button type="submit" class="btn btn-success btn-block">Login As Developer</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="pricing ui-ribbon-container">
+                <div class="ui-ribbon-wrapper">
+                    <div class="ui-ribbon">
+                        DEMO
+                    </div>
+                </div>
+                <div class="title">
+                    <h2>Login As</h2>
+                    <h1>Submitter</h1>
+                </div>
+                <div class="x_content">
+                    <div class="">
+                        <div class="pricing_features">
+                            <ul class="list-unstyled text-left">
+                                <li><i class="fa fa-check text-success"></i> Limited <strong> download quota</strong></li>
+                                <li><i class="fa fa-check text-success"></i> <strong>Cash on Delivery</strong></li>
+                                <li><i class="fa fa-check text-success"></i> All time <strong> updates</strong></li>
+                                <li><i class="fa fa-times text-danger"></i> <strong>Unlimited</strong> access to all files</li>
+                                <li><i class="fa fa-times text-danger"></i> <strong>Allowed</strong> to be exclusing per sale</li>
+                                <li><i class="fa fa-times text-danger"></i> 2 years access <strong> to all storage locations</strong></li>
+                                <li><i class="fa fa-times text-danger"></i> <strong>Unlimited</strong> storage</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="pricing_footer">
+                        @using (Html.BeginForm("DemoLogin", "Account", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.Hidden("Email", "Submitter")
+                            <button type="submit" class="btn btn-success btn-block">Login As Submitter</button>
+                        }
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
 

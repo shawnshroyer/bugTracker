@@ -19,7 +19,7 @@ namespace bugTracker.Models
 
         //Foreign Keys
         public int TicketId { get; set; }
-        public string UserId { get; set; }
+        public string RecipientId { get; set; }
 
         //Navigation - From Parent
         public virtual Ticket Ticket { get; set; }

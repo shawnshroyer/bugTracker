@@ -1,63 +1,50 @@
 ﻿@model IEnumerable<bugTracker.Models.TicketNotification>
+@using bugTracker.Extensions
+@using bugTracker.Helpers
 
 @{
+    NotificationHelper notificationHelper = new NotificationHelper();
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Ticket.Title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.User.FirstName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Sent)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Subject)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Body)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Status)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Ticket.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.User.FirstName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Sent)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Subject)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Body)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Status)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
-
-</table>
+<div class="container">
+    <div class="row">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>All Notification</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                @foreach (var notification in notificationHelper.NotificationAll())
+                {
+                    <div class="col-md-3">
+                        <ul class="list-unstyled msg_list">
+                            <li>
+                                <a>
+                                    <span class="image">
+                                        @if (string.IsNullOrEmpty(User.Identity.Avatar()))
+                                        {
+                                            <img src="~/images/user.png" alt="imge" />
+                                        }
+                                        else
+                                        {
+                                            <img src="~/images/@User.Identity.Avatar()" alt="img" />
+                                        }
+                                    </span>
+                                    <span>
+                                        <span>@User.Identity.FirstName() @User.Identity.LastName()</span>
+                                        <span class="time">@notificationHelper.HowLongAgo(notification.Sent)</span>
+                                    </span>
+                                    <span class="message">
+                                        <span class="h5">@Html.Raw(notification.Subject)</span>
+                                        @Html.Raw(notification.Body)
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

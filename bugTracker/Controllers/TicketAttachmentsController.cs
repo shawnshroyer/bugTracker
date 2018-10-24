@@ -13,6 +13,7 @@ using bugTracker.Helpers;
 namespace bugTracker.Controllers
 {
     [RequireHttps]
+    [Authorize]
     public class TicketAttachmentsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

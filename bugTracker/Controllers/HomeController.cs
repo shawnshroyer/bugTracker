@@ -8,12 +8,15 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using static bugTracker.ApplicationSignInManager;
+using System.Data.Entity;
 
 namespace bugTracker.Controllers
 {
     [RequireHttps]
     public class HomeController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
+
         public ActionResult Index()
         {
             if (!(User.Identity.IsAuthenticated))
@@ -76,5 +79,20 @@ namespace bugTracker.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        public ActionResult ClearNotification(int? id)
+        {
+            var notification = db.TicketNotifications.Find(id);
+            notification.IsRead = true;
+
+            db.Entry(notification).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return Json(true);
+        }
     }
 }
+
+
+
+//var oldTicket = db.Tickets.AsNoTracking().FirstOrDefault(t => t.Id == ticket.Id);

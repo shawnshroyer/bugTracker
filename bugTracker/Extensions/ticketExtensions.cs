@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Configuration;
 using bugTracker.Models;
@@ -40,6 +42,129 @@ namespace bugTracker.Extensions
                     db.TicketHistories.Add(ticketHistory);
                 }
             }
+            db.SaveChanges();
+        }
+
+        public static async Task SetNotifications(this Ticket ticket, Ticket oldTicket)
+        {
+            //Let's begin with notifications for Ticket Assignment/UnAssignment
+            var newAssignment = (ticket.AssignedToUserId != null && oldTicket.AssignedToUserId == null);
+            var unAssignment = (ticket.AssignedToUserId == null && oldTicket.AssignedToUserId != null);
+            var reAssignment = ((ticket.AssignedToUserId != null && oldTicket.AssignedToUserId != null) &&
+                               (ticket.AssignedToUserId != oldTicket.AssignedToUserId));
+
+            //Compose the body of the email
+            var body = new StringBuilder();
+            body.AppendFormat("<p>Email From: <bold>{0}</bold>({1})</p>", "Administrator", WebConfigurationManager.AppSettings["emailfrom"]);
+            body.AppendLine("<br/><p><u><b>Message:</b></u></p>");
+            body.AppendFormat("<p><b>Project Name:</b> {0}</p>", db.Projects.FirstOrDefault(p => p.Id == ticket.ProjectId).Name);
+            body.AppendFormat("<p><b>Ticket Title:</b> {0} | Id: {1}</p>", ticket.Title, ticket.Id);
+            body.AppendFormat("<p><b>Ticket Created:</b> {0}</p>", ticket.Created);
+            body.AppendFormat("<p><b>Ticket Type:</b> {0}</p>", db.TicketTypes.Find(ticket.TicketTypeId).Type);
+            body.AppendFormat("<p><b>Ticket Status:</b> {0}</p>", db.TicketStatus.Find(ticket.TicketStatusId).Status);
+            body.AppendFormat("<p><b>Ticket Priority:</b> {0}</p>", db.TicketPriorities.Find(ticket.TicketPriorityId).Priority);
+
+            //Generate email
+            IdentityMessage email = null;
+            if (newAssignment)
+            {
+                //Generate 1 email to the new Developer letting them know they have been assigned
+                email = new IdentityMessage()
+                {
+                    Subject = "Notification: A Ticket has been assigned to you...",
+                    Body = body.ToString(),
+                    Destination = db.Users.Find(ticket.AssignedToUserId).Email
+                };
+
+                var svc = new EmailService();
+                await svc.SendAsync(email);
+            }
+            else if (unAssignment)
+            {
+                //Generate 1 email to the old Developer letting them know they have been unassigned
+                email = new IdentityMessage()
+                {
+                    Subject = "Notification: You have been taken off of a Ticket...",
+                    Body = body.ToString(),
+                    Destination = db.Users.Find(oldTicket.AssignedToUserId).Email
+                };
+
+                var svc = new EmailService();
+                await svc.SendAsync(email);
+            }
+            else if (reAssignment)
+            {
+                //Generate 1 email to the new Developer letting them know they have been assigned
+                email = new IdentityMessage()
+                {
+                    Subject = "Notification: A Ticket has been assigned to you...",
+                    Body = body.ToString(),
+                    Destination = db.Users.Find(ticket.AssignedToUserId).Email
+                };
+
+                var svc = new EmailService();
+                await svc.SendAsync(email);
+
+                //Generate 1 email to the old Developer letting them know they have been unassigned
+                email = new IdentityMessage()
+                {
+                    Subject = "Notification: You have been taken off of a Ticket...",
+                    Body = body.ToString(),
+                    Destination = db.Users.Find(oldTicket.AssignedToUserId).Email
+                };
+
+                svc = new EmailService();
+                await svc.SendAsync(email);
+            }
+
+            //Generate Notification
+            TicketNotification notification = null;
+            if (newAssignment)
+            {
+                notification = new TicketNotification
+                {
+                    Sent = DateTimeOffset.Now,
+                    Subject = "Notification: A Ticket has been assigned to you...<br />",
+                    Body = body.ToString(),
+                    RecipientId = ticket.AssignedToUserId,
+                    TicketId = ticket.Id,
+                    
+                    IsRead = false
+                };
+                db.TicketNotifications.Add(notification);
+            }
+            else if (unAssignment)
+            {
+                notification = new TicketNotification
+                {
+                    Body = "Notification: You have been taken off of a Ticket...<br />" + body.ToString(),
+                    RecipientId = oldTicket.AssignedToUserId,
+                    TicketId = ticket.Id,
+                    IsRead = false
+                };
+                db.TicketNotifications.Add(notification);
+            }
+            else if (reAssignment)
+            {
+                notification = new TicketNotification
+                {
+                    Body = "Notification: A Ticket has been assigned to you...<br />" + body.ToString(),
+                    RecipientId = ticket.AssignedToUserId,
+                    TicketId = ticket.Id,
+                    IsRead = false
+                };
+                db.TicketNotifications.Add(notification);
+
+                notification = new TicketNotification
+                {
+                    Body = "Notification: You have been taken off of a Ticket...<br />" + body.ToString(),
+                    RecipientId = oldTicket.AssignedToUserId,
+                    TicketId = ticket.Id,
+                    IsRead = false
+                };
+                db.TicketNotifications.Add(notification);
+            }
+
             db.SaveChanges();
         }
 

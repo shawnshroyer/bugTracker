@@ -49,7 +49,8 @@ namespace bugTracker.Migrations
                     Email = "ShawnShroyer@mailinator.com",
                     FirstName = "Shawn",
                     LastName = "Shroyer",
-                    DisplayName = "Shawn Shroyer"
+                    DisplayName = "Shawn Shroyer",
+                    Avatar = ""
                 }, "testUser123");
             }
 
@@ -61,7 +62,8 @@ namespace bugTracker.Migrations
                     Email = "JasonTwichell@mailinator.com",
                     FirstName = "Jason",
                     LastName = "Twichell",
-                    DisplayName = "Twitch"
+                    DisplayName = "Twitch",
+                    Avatar = ""
                 }, "Abc&123!");
             }
  
@@ -73,7 +75,8 @@ namespace bugTracker.Migrations
                     Email = "pm@mailinator.com",
                     FirstName = "Project",
                     LastName = "Manager",
-                    DisplayName = "PM Supreme"
+                    DisplayName = "PM Supreme",
+                    Avatar = ""
                 }, "*pmUser123");
             }
 
@@ -85,7 +88,8 @@ namespace bugTracker.Migrations
                     Email = "developer@mailinator.com",
                     FirstName = "Lonely",
                     LastName = "Developer",
-                    DisplayName = "Developer Supreme"
+                    DisplayName = "Developer Supreme",
+                    Avatar = ""
                 }, "*devUser123");
             }
 
@@ -97,7 +101,8 @@ namespace bugTracker.Migrations
                     Email = "submitter@mailinator.com",
                     FirstName = "Sub",
                     LastName = "Mitter",
-                    DisplayName = "Submit"
+                    DisplayName = "Submit",
+                    Avatar = ""
                 }, "*subUser123");
             }
 
@@ -129,6 +134,59 @@ namespace bugTracker.Migrations
             //{
             //    roleManger.Create(new IdentityRole { Name = "" });
             //}
+
+
+            if (!context.Users.Any(u => u.Email == "DemoAdmin@mailinator.com"))
+            {
+                userManager.Create(new ApplicationUser
+                {
+                    UserName = "DemoAdmin@mailinator.com",
+                    Email = "DemoAdmin@mailinator.com",
+                    FirstName = "Demo",
+                    LastName = "Admin",
+                    DisplayName = "Admin Supreme",
+                    Avatar = ""
+                }, "*demoAdmin123");
+            }
+
+            if (!context.Users.Any(u => u.Email == "DemoPM@mailinator.com"))
+            {
+                userManager.Create(new ApplicationUser
+                {
+                    UserName = "DemoPM@mailinator.com",
+                    Email = "DemoPM@mailinator.com",
+                    FirstName = "Demo",
+                    LastName = "Manager",
+                    DisplayName = "PM Supreme",
+                    Avatar = ""
+                }, "*demoPM123");
+            }
+
+            if (!context.Users.Any(u => u.Email == "DemoDeveloper@mailinator.com"))
+            {
+                userManager.Create(new ApplicationUser
+                {
+                    UserName = "DemoDeveloper@mailinator.com",
+                    Email = "DemoDeveloper@mailinator.com",
+                    FirstName = "Demo",
+                    LastName = "Developer",
+                    DisplayName = "Developer Supreme",
+                    Avatar = ""
+                }, "*demoDeveloper123");
+            }
+
+            if (!context.Users.Any(u => u.Email == "DemoSubmitter@mailinator.com"))
+            {
+                userManager.Create(new ApplicationUser
+                {
+                    UserName = "DemoSubmitter@mailinator.com",
+                    Email = "DemoSubmitter@mailinator.com",
+                    FirstName = "Demo",
+                    LastName = "Submitter",
+                    DisplayName = "Submitter",
+                    Avatar = ""
+                }, "*demoSubmitter123");
+            }
         }
     }
 }

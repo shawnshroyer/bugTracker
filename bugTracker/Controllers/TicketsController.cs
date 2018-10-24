@@ -10,10 +10,12 @@ using bugTracker.Models;
 using bugTracker.Extensions;
 using bugTracker.Helpers;
 using Microsoft.AspNet.Identity;
+using System.Threading.Tasks;
 
 namespace bugTracker.Controllers
 {
     [RequireHttps]
+    [Authorize]
     public class TicketsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -24,8 +26,6 @@ namespace bugTracker.Controllers
         public ActionResult Index()
         {
             var tickets = db.Tickets.Include(t => t.AssignedToUser).Include(t => t.OwnerUser).Include(t => t.Project).Include(t => t.TicketPriority).Include(t => t.TicketStatus).Include(t => t.TicketType);
-
-            //ViewBag.PMProjects =
 
             return View(tickets.ToList());
         }
@@ -73,7 +73,6 @@ namespace bugTracker.Controllers
                 ticket.Created = DateTimeOffset.Now;
                 ticket.OwnerUserId = User.Identity.GetUserId();
 
-
                 db.Tickets.Add(ticket);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -118,13 +117,14 @@ namespace bugTracker.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,AssignedToUserId")] Ticket ticket)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Title,Description,Created,Updated,ProjectId,TicketTypeId,TicketPriorityId,TicketStatusId,OwnerUserId,AssignedToUserId")] Ticket ticket)
         {
             if (ModelState.IsValid)
             {
                 var oldTicket = db.Tickets.AsNoTracking().FirstOrDefault(t => t.Id == ticket.Id);
 
                 ticket.RecordHistory(oldTicket);
+                await ticket.SetNotifications(oldTicket);
 
                 ticket.Updated = DateTimeOffset.Now;
                 db.Entry(ticket).State = EntityState.Modified;

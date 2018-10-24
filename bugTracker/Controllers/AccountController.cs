@@ -11,6 +11,7 @@ using Microsoft.Owin.Security;
 using bugTracker.Models;
 using static bugTracker.ApplicationSignInManager;
 using System.Net.Mail;
+using System.Web.Configuration;
 
 namespace bugTracker.Controllers
 {
@@ -108,6 +109,45 @@ namespace bugTracker.Controllers
             }
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DemoLogin(string email)
+        {
+            var model = new LoginViewModel();
+            switch (email)
+            {
+                case "Admin":
+                    model.Email = "DemoAdmin@mailinator.com";
+                    model.Password = WebConfigurationManager.AppSettings["DemoAdmin"];
+                    model.RememberMe = false;
+                    break;
+                case "PM":
+                    model.Email = "DemoPM@mailinator.com";
+                    model.Password = WebConfigurationManager.AppSettings["DemoPM"];
+                    model.RememberMe = false;
+                    break;
+                case "Submitter":
+                    model.Email = "DemoAdmin@mailinator.com";
+                    model.Password = WebConfigurationManager.AppSettings["DemoSubmitter"];
+                    model.RememberMe = false;
+                    break;
+                case "Developer":
+                    model.Email = "DemoAdmin@mailinator.com";
+                    model.Password = WebConfigurationManager.AppSettings["DemoDeveloper"];
+                    model.RememberMe = false;
+                    break;
+                default:
+                    break;
+            }
+
+            // This doesn't count login failures towards account lockout
+            // To enable password failures to trigger account lockout, change to shouldLockout: true
+            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+
+            return RedirectToAction("Index", "Home");
+        }
+
         //
         // GET: /Account/VerifyCode
         [AllowAnonymous]
@@ -180,13 +220,19 @@ namespace bugTracker.Controllers
                     model.DisplayName = model.FirstName;
                 }
 
+                if (string.IsNullOrEmpty(model.Avatar))
+                {
+                    model.Avatar = string.Empty;
+                }
+
                 var user = new ApplicationUser
                 {
                     FirstName = model.FirstName,
                     LastName = model.LastName,
                     DisplayName = model.DisplayName,
                     UserName = model.Email,
-                    Email = model.Email
+                    Email = model.Email,
+                    Avatar = model.Avatar
                 };
 
                 var result = await UserManager.CreateAsync(user, model.Password);

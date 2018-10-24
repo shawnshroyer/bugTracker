@@ -33,3 +33,28 @@ ul.widget_profile_box
     max-height: 32px;
     max-width: 32px;
 }
+
+.title_padding_left {
+    padding: 55px 0 0 30px;
+}
+
+.title_padding_right {
+    padding: 55px 30px 0 0;
+}
+
+.ui-ribbon {
+    letter-spacing: 4px;
+}
+
+.x_content .h3_history {
+    font-size: 22px;
+}
+
+.x_content .h4_history {
+    font-size: 18px;
+}
+
+.p_history {
+    font-size: 15px;
+    text-indent: 15px;
+}

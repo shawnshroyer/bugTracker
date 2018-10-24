@@ -13,6 +13,7 @@ using bugTracker.Helpers;
 namespace bugTracker.Controllers
 {
     [RequireHttps]
+    [Authorize]
     public class ProjectsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

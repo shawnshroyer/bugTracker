@@ -1,4 +1,9 @@
-﻿@using bugTracker.Extensions
+﻿@using bugTracker.Controllers
+@using bugTracker.Extensions
+@using bugTracker.Helpers
+@{ 
+    NotificationHelper notificationHelper = new NotificationHelper();
+}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -80,9 +85,7 @@
                                 <li>
                                     <a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">
-                                        <li><a href="index.html">Dashboard</a></li>
-                                        <li><a href="index2.html">Dashboard2</a></li>
-                                        <li><a href="index3.html">Dashboard3</a></li>
+                                        <li>@Html.ActionLink("Home","Index","Home", null, null)</li>
                                     </ul>
                                 </li>
                                 <li>
@@ -123,103 +126,82 @@
                         <div class="nav toggle">
                             <a id="menu_toggle"><i class="fa fa-bars"></i></a>
                         </div>
-                        <ul class="nav navbar-nav navbar-right">
-                            <li class="">
-                                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                    @if (string.IsNullOrEmpty(User.Identity.Avatar()))
-                                    {
-                                        <img src="~/images/user.png" alt="">
-                                    }
-                                    else
-                                    {
-                                        <img src="~/images/@User.Identity.Avatar()" alt="">
-                                    }@User.Identity.FullName()
-                                    <span class=" fa fa-angle-down"></span>
-                                </a>
-                                <ul class="dropdown-menu dropdown-usermenu pull-right">
-                                    <li>
-                                        @Html.ActionLink("Profile", "UserProfile", "Manage")
-                                    </li>
-                                    @if (User.IsInRole("Administrator"))
-                                    {
+                        <div id="navContainer">
+                            <ul id="navBar" class="nav navbar-nav navbar-right">
+                                <li class="">
+                                    <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                        @if (string.IsNullOrEmpty(User.Identity.Avatar()))
+                                        {
+                                            <img src="~/images/user.png" alt="">
+                                        }
+                                        else
+                                        {
+                                            <img src="~/images/@User.Identity.Avatar()" alt="">
+                                        }@User.Identity.FullName()
+                                        <span class=" fa fa-angle-down"></span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-usermenu pull-right">
                                         <li>
-                                            @Html.ActionLink("Settings", "RoleAssignment", "Manage")
+                                            @Html.ActionLink("Profile", "UserProfile", "Manage")
                                         </li>
-                                    }
-                                    <li>
-                                        @Html.Partial("_LoginPartial")
-                                    </li>
-                                </ul>
-                            </li>
+                                        @if (User.IsInRole("Administrator"))
+                                        {
+                                            <li>
+                                                @Html.ActionLink("Settings", "RoleAssignment", "Manage")
+                                            </li>
+                                        }
+                                        <li>
+                                            @Html.Partial("_LoginPartial")
+                                        </li>
+                                    </ul>
+                                </li>
 
-                            <!-- Message Notifications -->
-                            <li role="presentation" class="dropdown">
-                                <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
-                                    <i class="fa fa-envelope-o"></i>
-                                    <span class="badge bg-green">6</span>
-                                </a>
-                                <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
-                                    <li>
-                                        <a>
-                                            <span class="image"><img src="~/images/img.jpg" alt="Profile Image" /></span>
-                                            <span>
-                                                <span>John Smith</span>
-                                                <span class="time">3 mins ago</span>
-                                            </span>
-                                            <span class="message">
-                                                Film festivals used to be do-or-die moments for movie makers. They were where...
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a>
-                                            <span class="image"><img src="~/images/img.jpg" alt="Profile Image" /></span>
-                                            <span>
-                                                <span>John Smith</span>
-                                                <span class="time">3 mins ago</span>
-                                            </span>
-                                            <span class="message">
-                                                Film festivals used to be do-or-die moments for movie makers. They were where...
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a>
-                                            <span class="image"><img src="~/images/img.jpg" alt="Profile Image" /></span>
-                                            <span>
-                                                <span>John Smith</span>
-                                                <span class="time">3 mins ago</span>
-                                            </span>
-                                            <span class="message">
-                                                Film festivals used to be do-or-die moments for movie makers. They were where...
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a>
-                                            <span class="image"><img src="~/images/img.jpg" alt="Profile Image" /></span>
-                                            <span>
-                                                <span>John Smith</span>
-                                                <span class="time">3 mins ago</span>
-                                            </span>
-                                            <span class="message">
-                                                Film festivals used to be do-or-die moments for movie makers. They were where...
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <div class="text-center">
-                                            <a>
-                                                <strong>See All Alerts</strong>
-                                                <i class="fa fa-angle-right"></i>
-                                            </a>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </li>
-                            <!-- End Message Notification -->
+                                <!-- Message Notifications -->
 
-                        </ul>
+                                <li role="presentation" class="dropdown">
+                                    <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                                        <i class="fa fa-envelope-o"></i>
+                                        <span class="badge bg-green">@notificationHelper.NotificationUnread().Count()</span>
+                                    </a>
+                                    <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+                                        @foreach (var notification in notificationHelper.NotificationUnread())
+                                        {
+                                            <li class="notification" id="@notification.Id">
+                                                <a>
+                                                    @if (string.IsNullOrEmpty(User.Identity.Avatar()))
+                                                    {
+                                                        <span class="image"><img src="~/images/user.png" alt="Profile Image" /></span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="image"><img src="~/images/@User.Identity.Avatar()" alt="Profile Image" /></span>
+                                                    }
+                                                    <span>
+                                                        <span>@User.Identity.FirstName() @User.Identity.LastName()</span>
+                                                        <span class="time">@notificationHelper.HowLongAgo(notification.Sent)</span>
+                                                    </span>
+                                                    <span class="message">
+                                                        <span class="h5">@Html.Raw(notification.Subject)</span>
+                                                        @Html.Raw(notification.Body)
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        }
+                                        <li>
+                                            <div class="text-center">
+                                                <a>
+                                                    <strong>@Html.ActionLink("See All Alerts", "Index", "TicketNotifications", null, null) </strong>
+                                                    <i class="fa fa-angle-right"></i>
+                                                </a>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <!-- End Message Notification -->
+
+                            </ul>
+                        </div>
                     </nav>
                 </div>
             </div>
@@ -281,6 +263,20 @@
 
     <!-- Custom Theme Scripts -->
     <script src="~/Scripts/custom.min.js"></script>
+
+    <script>
+        $(".notification").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("ClearNotification", "Home", null)",
+                data: { id: this.id },
+                success: function (result)
+                {
+                    $("#navContainer").load(location.href + " #navBar");
+                },
+            });
+        });
+    </script>
 
     @RenderSection("scripts", required: false)
 </body>

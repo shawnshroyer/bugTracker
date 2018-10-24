@@ -108,7 +108,12 @@ namespace bugTracker.Helpers
 
         public string GetUserAvatar(string userId)
         {
-            if (string.IsNullOrEmpty(userManager.FindById(userId).Avatar.ToString()))
+            if (string.IsNullOrEmpty(userId))
+            {
+                return string.Empty;
+            }
+
+            if (string.IsNullOrEmpty(userManager.FindById(userId).Avatar))
             {
                 return string.Empty;
             }
