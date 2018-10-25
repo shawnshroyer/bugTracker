@@ -187,6 +187,18 @@ namespace bugTracker.Migrations
                     Avatar = ""
                 }, "*demoSubmitter123");
             }
+
+            userId = userManager.FindByEmail("DemoAdmin@mailinator.com").Id;
+            userManager.AddToRole(userId, "Administrator");
+
+            userId = userManager.FindByEmail("DemoPM@mailinator.com").Id;
+            userManager.AddToRole(userId, "Project Manager");
+
+            userId = userManager.FindByEmail("DemoDeveloper@mailinator.com").Id;
+            userManager.AddToRole(userId, "Developer");
+
+            userId = userManager.FindByEmail("DemoSubmitter@mailinator.com").Id;
+            userManager.AddToRole(userId, "Submitter");
         }
     }
 }

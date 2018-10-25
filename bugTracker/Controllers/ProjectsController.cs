@@ -32,9 +32,9 @@ namespace bugTracker.Controllers
                 return View(projects);
             }
 
-            ViewBag.Projects = projects;
+            ViewBag.Projects = db.Projects.ToList();
 
-            return View(db.Projects.ToList());
+            return View(projects);
         }
 
         // GET: Projects/Details/5
@@ -69,6 +69,8 @@ namespace bugTracker.Controllers
             if (ModelState.IsValid)
             {
                 project.Created = DateTimeOffset.Now;
+
+                projectHelper.AddUserToProject(User.Identity.GetUserId(), project.Id);
 
                 db.Projects.Add(project);
                 db.SaveChanges();
