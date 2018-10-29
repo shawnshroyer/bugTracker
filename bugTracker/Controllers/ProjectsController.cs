@@ -70,10 +70,11 @@ namespace bugTracker.Controllers
             {
                 project.Created = DateTimeOffset.Now;
 
-                projectHelper.AddUserToProject(User.Identity.GetUserId(), project.Id);
-
                 db.Projects.Add(project);
                 db.SaveChanges();
+
+                projectHelper.AddUserToProject(User.Identity.GetUserId(), project.Id);
+
                 return RedirectToAction("Create");
             }
 

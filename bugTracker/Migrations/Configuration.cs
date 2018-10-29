@@ -161,7 +161,7 @@ namespace bugTracker.Migrations
                     Avatar = ""
                 }, "*demoPM123");
             }
-
+      
             if (!context.Users.Any(u => u.Email == "DemoDeveloper@mailinator.com"))
             {
                 userManager.Create(new ApplicationUser

@@ -114,6 +114,11 @@ namespace bugTracker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DemoLogin(string email)
         {
+           if(Request.IsAuthenticated)
+            {
+                AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            }
+
             var model = new LoginViewModel();
             switch (email)
             {
@@ -128,12 +133,12 @@ namespace bugTracker.Controllers
                     model.RememberMe = false;
                     break;
                 case "Submitter":
-                    model.Email = "DemoAdmin@mailinator.com";
+                    model.Email = "DemoSubmitter@mailinator.com";
                     model.Password = WebConfigurationManager.AppSettings["DemoSubmitter"];
                     model.RememberMe = false;
                     break;
                 case "Developer":
-                    model.Email = "DemoAdmin@mailinator.com";
+                    model.Email = "DemoDeveloper@mailinator.com";
                     model.Password = WebConfigurationManager.AppSettings["DemoDeveloper"];
                     model.RememberMe = false;
                     break;

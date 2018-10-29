@@ -60,16 +60,15 @@ namespace bugTracker.Helpers
         {
             bool result = false;
             string pmId = ProjectHelper.PMIdforTicket(projectId);
+            result = db.Tickets.Any(t => t.Id == ticketId && (t.OwnerUserId == userId || t.AssignedToUserId == userId));
 
-            if (pmId == "Not Assigned")
-            {
-                result = db.Tickets.All(t => t.Id == ticketId && (t.OwnerUserId == userId || t.AssignedToUserId == userId));
-            } else
+            if (pmId == userId || result)
             {
                 return true;
+            } else
+            {
+                return false;
             }
-
-            return result;
         }
     }
 }

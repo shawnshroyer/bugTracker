@@ -61,7 +61,7 @@ namespace bugTracker.Controllers
         {
             ViewBag.AssignedToUserId = new SelectList(db.Users, "Id", "FirstName");
             ViewBag.OwnerUserId = new SelectList(db.Users, "Id", "FirstName");
-            ViewBag.ProjectId = new SelectList(projectHelper.ListUserProjects(User.Identity.GetUserId()), "Id", "Name");
+            ViewBag.ProjectId = new SelectList(db.Projects, "Id", "Name");
             ViewBag.TicketPriorityId = new SelectList(db.TicketPriorities, "Id", "Priority");
             ViewBag.TicketStatusId = new SelectList(db.TicketStatus, "Id", "Status");
             ViewBag.TicketTypeId = new SelectList(db.TicketTypes, "Id", "Type");
@@ -79,6 +79,7 @@ namespace bugTracker.Controllers
             {
                 ticket.Created = DateTimeOffset.Now;
                 ticket.OwnerUserId = User.Identity.GetUserId();
+                ticket.TicketStatusId = 1; //Id 1 is Created Ticket Status
 
                 db.Tickets.Add(ticket);
                 db.SaveChanges();

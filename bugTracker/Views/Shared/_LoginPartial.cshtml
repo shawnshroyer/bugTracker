@@ -5,7 +5,6 @@
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", type = "hidden" }))
     {
         @Html.AntiForgeryToken()
-
     }
 }
 else

@@ -9,6 +9,7 @@
 @using (Html.BeginForm("Edit", "Projects", FormMethod.Post, new { @id = "editProjectForm" }))
 {
     @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.Created)
 
 <div class="form-horizontal">
     <div class="container">
@@ -136,8 +137,6 @@
 {
     <script>
         $("#editPrjBtn").click(function () {
-            $('<input type="hidden" name="Id" value=@Model.Id>').appendTo("#cngUserForm");
-            $('<input type="hidden" name="Created" value=@Model.Created>').appendTo("#cngUserForm");
             $("#editProjectForm").submit();
         });
 
